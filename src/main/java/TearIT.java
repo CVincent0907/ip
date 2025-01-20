@@ -1,4 +1,3 @@
-import java.awt.*;
 
 public class TearIT {
 
@@ -16,9 +15,17 @@ public class TearIT {
 
 
     public static void main(String[] args) {
+        TearIT.openingMessage();
+
+        // Echo is done here with ending message included when user enter "end"
+        Echo.echo(TearIT.ending);
+    }
+
+    public static void openingMessage() {
         System.out.println("-------------------------------------------------");
         System.out.println(TearIT.opening);
-        System.out.println(TearIT.ending);
     }
+
+
 
 }
