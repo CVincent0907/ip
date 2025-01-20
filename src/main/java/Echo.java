@@ -14,16 +14,12 @@ public class Echo {
                 Echo.list();
                 input = sc.nextLine();
             } else {
-                System.out.println("    -------------------------------------------------");
-                Echo.taskArray[Echo.taskCount] = input;
-                Echo.taskCount++;
-                System.out.println("      added: " + input);
-                System.out.println("    -------------------------------------------------");
+                Echo.add(input);
                 input = sc.nextLine();
             }
 
         }
-        System.out.println("    -------------------------------------------------");
+        System.out.println("-------------------------------------------------");
         System.out.println(ending);
     }
 
@@ -34,6 +30,14 @@ public class Echo {
         for (int i = 0; i < Echo.taskCount; i++) {
             System.out.println("    " + (i+1) + ". " + Echo.taskArray[i]);
         }
+        System.out.println("    -------------------------------------------------");
+    }
+
+    public static void add(String input) {
+        System.out.println("    -------------------------------------------------");
+        Echo.taskArray[Echo.taskCount] = input;
+        Echo.taskCount++;
+        System.out.println("      added: " + input);
         System.out.println("    -------------------------------------------------");
     }
 
