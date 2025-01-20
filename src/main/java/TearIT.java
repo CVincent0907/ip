@@ -17,7 +17,7 @@ public class TearIT {
     public static void main(String[] args) {
         TearIT.openingMessage();
 
-        // Echo is done here with ending message included when user enter "end"
+        // Echo is done here with ending message included when user enter "bye"
         Echo.echo(TearIT.ending);
     }
 
