@@ -1,8 +1,7 @@
 import java.util.Objects;
 import java.util.Scanner;
 public class Echo {
-    private static String[] taskArray = new String[100];
-    private static int taskCount = 0;
+    private static Task[] taskArray = new Task[100];
 
     //This function receives TearIt.ending as String input
     //This function prints out echo and ending message when user enter "bye"
@@ -27,18 +26,25 @@ public class Echo {
     // This is a list function that display all task in taskArray upon input list/LIST or its variant
     public static void list() {
         System.out.println("    -------------------------------------------------");
-        for (int i = 0; i < Echo.taskCount; i++) {
+        for (int i = 0; i < Task.getTaskCount(); i++) {
             System.out.println("    " + (i+1) + ". " + Echo.taskArray[i]);
         }
         System.out.println("    -------------------------------------------------");
     }
 
+    // This function add every user input  except mark/list/bye as task to taskArray
+    // Receive user input as String
     public static void add(String input) {
         System.out.println("    -------------------------------------------------");
-        Echo.taskArray[Echo.taskCount] = input;
-        Echo.taskCount++;
+        Echo.taskArray[Task.getTaskCount()] = new Task(input);
+        Task.addTaskCount();
         System.out.println("      added: " + input);
         System.out.println("    -------------------------------------------------");
     }
+
+
+//    public static void mark(int num) {
+//
+//    }
 
 }
