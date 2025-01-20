@@ -8,7 +8,7 @@ public class Echo {
     public static void echo(String ending) {
         Scanner sc = new Scanner(System.in);
 
-        // might need to add in error handling for mark but without number
+        // might need to add in error handling for mark but without number or number that is out of bound
         while (true) {
             String input = sc.nextLine();
             String[] parts = input.split(" ");
@@ -45,18 +45,27 @@ public class Echo {
     // This is an overloaded list function that use to mark and display task by receiving input
     // input: task number and boolean mark and String msg
     public static void list(int i, boolean mark, String msg) {
-        if (mark) {
-            Echo.taskArray[i-1].mark();
+        if (i <= Task.getTaskCount()) {
+            if (mark) {
+                Echo.taskArray[i-1].mark();
+            } else {
+                Echo.taskArray[i-1].unmark();
+            }
+            System.out.println("    -------------------------------------------------");
+            System.out.println(msg + i + " .");
+            for (int j = 0; j < Task.getTaskCount(); j++) {
+                System.out.println("    " + (j+1) + ". " + Echo.taskArray[j]);
+            }
+            System.out.println("    -------------------------------------------------");
         } else {
-            Echo.taskArray[i-1].unmark();
+            System.out.println("    -------------------------------------------------");
+            System.out.println("You do not have task " + i + "!");
+            for (int j = 0; j < Task.getTaskCount(); j++) {
+                System.out.println("    " + (j+1) + ". " + Echo.taskArray[j]);
+            }
+            System.out.println("    -------------------------------------------------");
         }
 
-        System.out.println("    -------------------------------------------------");
-        System.out.println(msg);
-        for (int j = 0; j < Task.getTaskCount(); j++) {
-            System.out.println("    " + (j+1) + ". " + Echo.taskArray[j]);
-        }
-        System.out.println("    -------------------------------------------------");
     }
 
     // This function add every user input  except mark/list/bye as task to taskArray
@@ -72,13 +81,13 @@ public class Echo {
     // This function marks the ith numbered task done and display it
     // Receive int i as input
     public static void markRemark(int i) {
-        Echo.list(i, true, "    Well Done! You finished task " + i + ".");
+        Echo.list(i, true, "    Well Done! You finished task ");
     }
 
     // This function unmarks the ith numbered task done and display it
     // Receive int i as input
     public static void unmarkRemark(int i) {
-        Echo.list(i, false, "   Oh No! You haven't completed task " + i + ".");
+        Echo.list(i, false, "   Oh No! You haven't completed task ");
     }
 
 
