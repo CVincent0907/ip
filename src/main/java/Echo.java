@@ -8,13 +8,13 @@ public class Echo {
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
         while (!Objects.equals(input, "bye")) {
-            System.out.println("-------------------------------------------------");
-            System.out.println(input);
-            System.out.println("-------------------------------------------------");
+            System.out.println("    -------------------------------------------------");
+            System.out.println("    " + input);
+            System.out.println("    -------------------------------------------------");
             input = sc.nextLine();
         }
-        System.out.println("-------------------------------------------------");
+        System.out.println("    -------------------------------------------------");
         System.out.println(ending);
     }
-    
+
 }
