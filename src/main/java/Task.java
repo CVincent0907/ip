@@ -2,6 +2,8 @@ public class Task {
     private static int taskCount = 0;
     private final String description;
 
+    private boolean isDone = false;
+
     public static int getTaskCount() {
         return Task.taskCount;
     }
@@ -10,12 +12,25 @@ public class Task {
         Task.taskCount++;
     }
 
+    public void mark() {
+        this.isDone = true;
+    }
+
+    public void unmark() {
+        this.isDone = false;
+    }
+
     public Task(String description) {
         this.description = description;
     }
 
     @Override
     public String toString() {
-        return this.description;
+        if (this.isDone) {
+            return "[X] " + this.description;
+        } else {
+            return "[ ] " + this.description;
+        }
     }
+
 }
