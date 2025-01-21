@@ -1,0 +1,9 @@
+hi
+todo read book
+deadline return book /by 7pm
+event birthday party /from Mon 2pm /to Mon 5pm
+list
+mark 1
+unmark 1
+mark sh
+bye
