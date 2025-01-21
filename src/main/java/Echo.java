@@ -8,14 +8,16 @@ public class Echo {
 
     //This function receives TearIt.ending as String input
     //This function prints out echo and ending message when user enter "bye"
+    //input1: the ending messaged passed from tearIT
     public static void echo(String ending) {
         Scanner sc = new Scanner(System.in);
 
-        // might need to add in error handling for mark but without number or number that is out of bound
+        // ErrorCode added in to handle the command which is NOT TODO, DEADLINE, EVENT
         while (true) {
             String input = sc.nextLine();
             String[] parts = input.split(" ");
             String part = parts[0];
+
 
             if (Objects.equals(part.toLowerCase(), "list")) {
                 Echo.list();
@@ -26,16 +28,22 @@ public class Echo {
             } else if (Objects.equals(part.toLowerCase(), "bye")) {
                 break;
             } else {
-                Echo.add(input);
+                boolean errorCode = Echo.add(input);
+                // should also specify input format to user also like from ... /to ....
+                if (!errorCode) {
+                    System.out.println("    System does not support such command, only todo or event or deadline command only!");
+                }
             }
         }
 
         System.out.println("-------------------------------------------------");
         System.out.println(ending);
+
     }
 
 
     // This is a list function that display all task in taskArray upon input list/LIST or its variant
+    // input = None
     public static void list() {
         System.out.println("    -------------------------------------------------");
         System.out.println("    Here are the tasks in your list:");
@@ -46,7 +54,7 @@ public class Echo {
     }
 
     // This is an overloaded list function that use to mark and display task by receiving input
-    // input: task number and boolean mark and String msg
+    // input1: task order input2: mark or unmark(true or false) input3: String msg (congratz or humiliating msg based on completion)
     public static void list(int i, boolean mark, String msg) {
         if (i <= Task.getTaskCount()) {
             if (mark) {
@@ -72,21 +80,23 @@ public class Echo {
     }
 
     // This function add every user input  except mark/list/bye as task to taskArray
-    // Receive input 1: task description input 2: task type (event, deadline, todo)
     // If none of them match.... REMEMBER to add in handle (we only handle for TODO, DEADLINE and EVENT)
-    public static void add(String input) {
+    // Receive input 1: task description input 2: task type (event, deadline, todo)
+    public static boolean add(String input) {
         System.out.println("    -------------------------------------------------");
 
-        System.out.println("    Got it. I've added this task:");
+
         if (input.toLowerCase().startsWith("todo")) {
            Echo.extractAndCreate(input, Todo.regex, 1);
         } else if (input.toLowerCase().startsWith("deadline")) {
             Echo.extractAndCreate(input, Deadline.regex, 2);
         } else if (input.toLowerCase().startsWith("event")) {
             Echo.extractAndCreate(input, Event.regex, 3);
+        } else {
+            return false;
         }
 
-
+        System.out.println("    Got it. I've added this task:");
         String message1 = String.format("       %s", Echo.taskArray[Task.getTaskCount()-1]);
         System.out.println(message1);
 
@@ -94,16 +104,17 @@ public class Echo {
         System.out.println(message2);
 
         System.out.println("    -------------------------------------------------");
+        return true;
     }
 
     // This function marks the ith numbered task done and display it
-    // Receive int i as input
+    // input1 : the order of task
     public static void markRemark(int i) {
         Echo.list(i, true, "    Well Done! You finished task ");
     }
 
     // This function unmarks the ith numbered task done and display it
-    // Receive int i as input
+    // input1 : the order of task
     public static void unmarkRemark(int i) {
         Echo.list(i, false, "   Oh No! You haven't completed task ");
     }
