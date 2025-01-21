@@ -13,7 +13,6 @@ public class Event extends Task{
 
     @Override
     public String toString() {
-        String format = String.format("[E]%s (from: %s to: %s)", super.toString(), this.fromTime, this.toTime);
-        return format;
+        return String.format("[E]%s (from: %s to: %s)",super.toString(), this.fromTime, this.toTime);
     }
 }
