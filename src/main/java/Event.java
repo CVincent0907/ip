@@ -2,7 +2,8 @@ public class Event extends Task{
 
     private final String fromTime;
     private final String toTime;
-    // This regex does not allow from 12/7/2028 but instead 12-8-2025
+    // This regex DOES NOT allow from 12/7/2028 but instead 12-8-2025
+    // NEED TO FIND WAY TO ADDRESS IT
     public static final  String regex = "(?i)^event\\s+([^/]+)\\s+/from\\s+([^/]+)\\s+/to\\s+(.+)$";
 
     public Event(String description, String fromTime, String toTime) {
