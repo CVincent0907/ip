@@ -32,6 +32,7 @@ public class Echo {
                     } catch (NumberFormatException e) {
                         System.out.println("    " + e.getMessage());
                         System.out.println("    The argument should be an integer!");
+                        System.out.println("    -------------------------------------------------");
                     } finally {
 
                     }
@@ -47,6 +48,7 @@ public class Echo {
                     } catch (NumberFormatException e) {
                         System.out.println("    " + e.getMessage());
                         System.out.println("    The argument should be an integer!");
+                        System.out.println("    -------------------------------------------------");
                     } finally {
 
                     }
@@ -82,7 +84,7 @@ public class Echo {
 
 
     // This is a list function that display all task in taskArray upon input list/LIST or its variant
-    // input = None
+    // input:None
     public static void list() {
         System.out.println("    -------------------------------------------------");
         System.out.println("    Here are the tasks in your list:");
@@ -165,7 +167,7 @@ public class Echo {
     // This function unmarks the ith numbered task done and display it
     // input1 : the order of task
     public static void unmarkRemark(Integer i) {
-        Echo.list(i, false, "   Oh No! You haven't completed task ");
+        Echo.list(i, false, "    Oh No! You haven't completed task ");
     }
 
     // This function extract the info from user input via regex and create the corresponding task object
