@@ -17,21 +17,60 @@ public class Echo {
             String input = sc.nextLine();
             String[] parts = input.split(" ");
             String part = parts[0];
+            int len = parts.length;
 
-
+            // SHOULD ADD AN ERROR HANDLING FOR THIS (currently: list 1/ list 2 also OK... future extension maybe what if list 2: the first two are displayed)
             if (Objects.equals(part.toLowerCase(), "list")) {
                 Echo.list();
-            } else if (Objects.equals(part.toLowerCase(), "mark") && parts.length == 2) {
-                Echo.markRemark(Integer.parseInt(parts[1]));
-            } else if (Objects.equals(part.toLowerCase(), "unmark") && parts.length == 2) {
-                Echo.unmarkRemark(Integer.parseInt(parts[1]));
+            } else if (Objects.equals(part.toLowerCase(), "mark")) {
+
+                if (len == 1){
+                    System.out.println("    There must be an integer after mark !");
+                } else {
+                    try {
+                        Echo.markRemark(Integer.parseInt(parts[1]));
+                    } catch (NumberFormatException e) {
+                        System.out.println("    " + e.getMessage());
+                        System.out.println("    The argument should be an integer!");
+                    } finally {
+
+                    }
+                }
+
+            } else if (Objects.equals(part.toLowerCase(), "unmark")) {
+
+                if (len == 1){
+                    System.out.println("    There must be an integer after unmark !");
+                } else {
+                    try {
+                        Echo.unmarkRemark(Integer.parseInt(parts[1]));
+                    } catch (NumberFormatException e) {
+                        System.out.println("    " + e.getMessage());
+                        System.out.println("    The argument should be an integer!");
+                    } finally {
+
+                    }
+                }
+
             } else if (Objects.equals(part.toLowerCase(), "bye")) {
                 break;
             } else {
-                boolean errorCode = Echo.add(input);
+                int errorCode = Echo.add(input);
                 // should also specify input format to user also like from ... /to ....
-                if (!errorCode) {
-                    System.out.println("    System does not support such command, only todo or event or deadline command only!");
+                switch (errorCode) {
+                    case 0:
+                        System.out.println("    System does not support such command. Only todo ..., deadline ..., event..., mark..., unmark... and list only !");
+                        break;
+                    case -1:
+                        System.out.println("    There must be something after todo !");
+                        break;
+                    case -2:
+                        System.out.println("    There must be something after deadline !");
+                        break;
+                    case -3:
+                        System.out.println("    There must be something after event !");
+                        break;
+                    default:
                 }
             }
         }
@@ -55,7 +94,7 @@ public class Echo {
 
     // This is an overloaded list function that use to mark and display task by receiving input
     // input1: task order input2: mark or unmark(true or false) input3: String msg (congratz or humiliating msg based on completion)
-    public static void list(int i, boolean mark, String msg) {
+    public static void list(Integer i, boolean mark, String msg) {
         if (i <= Task.getTaskCount()) {
             if (mark) {
                 Echo.taskArray[i-1].mark();
@@ -82,18 +121,28 @@ public class Echo {
     // This function add every user input  except mark/list/bye as task to taskArray
     // If none of them match.... REMEMBER to add in handle (we only handle for TODO, DEADLINE and EVENT)
     // Receive input 1: task description input 2: task type (event, deadline, todo)
-    public static boolean add(String input) {
+    public static int add(String input) {
         System.out.println("    -------------------------------------------------");
-
+        String[] parts = input.split(" ");
+        int len = parts.length;
 
         if (input.toLowerCase().startsWith("todo")) {
+            if (len <= 1) {
+                return -1;
+            }
            Echo.extractAndCreate(input, Todo.regex, 1);
         } else if (input.toLowerCase().startsWith("deadline")) {
+            if (len <= 1) {
+                return -2;
+            }
             Echo.extractAndCreate(input, Deadline.regex, 2);
         } else if (input.toLowerCase().startsWith("event")) {
+            if (len <= 1) {
+                return -3;
+            }
             Echo.extractAndCreate(input, Event.regex, 3);
         } else {
-            return false;
+            return 0;
         }
 
         System.out.println("    Got it. I've added this task:");
@@ -104,18 +153,18 @@ public class Echo {
         System.out.println(message2);
 
         System.out.println("    -------------------------------------------------");
-        return true;
+        return 1;
     }
 
     // This function marks the ith numbered task done and display it
     // input1 : the order of task
-    public static void markRemark(int i) {
+    public static void markRemark(Integer i) {
         Echo.list(i, true, "    Well Done! You finished task ");
     }
 
     // This function unmarks the ith numbered task done and display it
     // input1 : the order of task
-    public static void unmarkRemark(int i) {
+    public static void unmarkRemark(Integer i) {
         Echo.list(i, false, "   Oh No! You haven't completed task ");
     }
 
