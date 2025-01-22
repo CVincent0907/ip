@@ -1,10 +1,11 @@
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Echo {
-    private static final Task[] taskArray = new Task[100];
+    private static final ArrayList<Task> taskArray = new ArrayList<>();
 
     //This function receives TearIt.ending as String input
     //This function prints out echo and ending message when user enter "bye"
@@ -30,6 +31,7 @@ public class Echo {
                     try {
                         Echo.markRemark(Integer.parseInt(parts[1]));
                     } catch (NumberFormatException e) {
+                        System.out.println("    -------------------------------------------------");
                         System.out.println("    " + e.getMessage());
                         System.out.println("    The argument should be an integer!");
                         System.out.println("    -------------------------------------------------");
@@ -46,6 +48,7 @@ public class Echo {
                     try {
                         Echo.unmarkRemark(Integer.parseInt(parts[1]));
                     } catch (NumberFormatException e) {
+                        System.out.println("    -------------------------------------------------");
                         System.out.println("    " + e.getMessage());
                         System.out.println("    The argument should be an integer!");
                         System.out.println("    -------------------------------------------------");
@@ -56,12 +59,27 @@ public class Echo {
 
             } else if (Objects.equals(part.toLowerCase(), "bye")) {
                 break;
+            } else if (Objects.equals(part.toLowerCase(), "delete")) {
+                if (len == 1){
+                    System.out.println("    There must be an integer after delete !");
+                } else {
+                    try {
+                        Echo.delete(Integer.parseInt(parts[1]));
+                    } catch (NumberFormatException e) {
+                        System.out.println("    -------------------------------------------------");
+                        System.out.println("    " + e.getMessage());
+                        System.out.println("    The argument should be an integer!");
+                        System.out.println("    -------------------------------------------------");
+                    } finally {
+
+                    }
+                }
             } else {
                 int errorCode = Echo.add(input);
                 // should also specify input format to user also like from ... /to ....
                 switch (errorCode) {
                     case 0:
-                        System.out.println("    System does not support such command. Only todo ..., deadline ..., event..., mark..., unmark... and list only !");
+                        System.out.println("    System does not support such command. Only todo ..., deadline ..., event..., mark..., unmark..., delete... and list and bye only !");
                         break;
                     case -1:
                         System.out.println("    There must be something after todo !");
@@ -89,7 +107,7 @@ public class Echo {
         System.out.println("    -------------------------------------------------");
         System.out.println("    Here are the tasks in your list:");
         for (int i = 0; i < Task.getTaskCount(); i++) {
-            System.out.println("    " + (i+1) + ". " + Echo.taskArray[i]);
+            System.out.println("    " + (i+1) + ". " + Echo.taskArray.get(i));
         }
         System.out.println("    -------------------------------------------------");
     }
@@ -97,23 +115,23 @@ public class Echo {
     // This is an overloaded list function that use to mark and display task by receiving input
     // input1: task order input2: mark or unmark(true or false) input3: String msg (congratz or humiliating msg based on completion)
     public static void list(Integer i, boolean mark, String msg) {
-        if (i <= Task.getTaskCount()) {
+        if (i <= Task.getTaskCount() && i!=0) {
             if (mark) {
-                Echo.taskArray[i-1].mark();
+                Echo.taskArray.get(i-1).mark();
             } else {
-                Echo.taskArray[i-1].unmark();
+                Echo.taskArray.get(i-1).unmark();
             }
             System.out.println("    -------------------------------------------------");
             System.out.println(msg + i + " .");
             for (int j = 0; j < Task.getTaskCount(); j++) {
-                System.out.println("    " + (j+1) + ". " + Echo.taskArray[j]);
+                System.out.println("    " + (j+1) + ". " + Echo.taskArray.get(j));
             }
             System.out.println("    -------------------------------------------------");
         } else {
             System.out.println("    -------------------------------------------------");
             System.out.println("You do not have task " + i + "!");
             for (int j = 0; j < Task.getTaskCount(); j++) {
-                System.out.println("    " + (j+1) + ". " + Echo.taskArray[j]);
+                System.out.println("    " + (j+1) + ". " + Echo.taskArray.get(j));
             }
             System.out.println("    -------------------------------------------------");
         }
@@ -148,7 +166,7 @@ public class Echo {
         }
 
         System.out.println("    Got it. I've added this task:");
-        String message1 = String.format("       %s", Echo.taskArray[Task.getTaskCount()-1]);
+        String message1 = String.format("       %s", Echo.taskArray.get(Task.getTaskCount()-1));
         System.out.println(message1);
 
         String message2 = String.format("    Now you have %d tasks in the list.", Task.getTaskCount());
@@ -156,6 +174,25 @@ public class Echo {
 
         System.out.println("    -------------------------------------------------");
         return 1;
+    }
+
+    // This is a delete function where user can use it to delete task
+    // input1: An integer
+
+    public static void delete(Integer i) throws NumberFormatException {
+        System.out.println("    -------------------------------------------------");
+        if (i <= Task.getTaskCount() && i!=0) {
+            String message = String.format("    %s", Echo.taskArray.get(i-1).toString());
+            Echo.taskArray.remove(i-1);
+            Task.reduceTaskCount();
+            System.out.println("    Hey bro! I have removed task " + i + ".");
+            System.out.println(message);
+        } else {
+            System.out.println("    Hey bro! You do not have task " + i + ".");
+        }
+        String message = String.format("    Now you have %d tasks in the list.", Task.getTaskCount());
+        System.out.println(message);
+        System.out.println("    -------------------------------------------------");
     }
 
     // This function marks the ith numbered task done and display it
@@ -178,11 +215,11 @@ public class Echo {
         Matcher matcher = pattern.matcher(userInput);
         if (matcher.find()) {
             if (groups == 1) {
-                Echo.taskArray[Task.getTaskCount()] = new Todo(matcher.group(1));
+                Echo.taskArray.add(new Todo(matcher.group(1)));
             } else if (groups == 2) {
-                Echo.taskArray[Task.getTaskCount()] = new Deadline(matcher.group(1), matcher.group(2));
+                Echo.taskArray.add(new Deadline(matcher.group(1), matcher.group(2)));
             } else {
-                Echo.taskArray[Task.getTaskCount()] = new Event(matcher.group(1), matcher.group(2), matcher.group(3));
+                Echo.taskArray.add(new Event(matcher.group(1), matcher.group(2), matcher.group(3)));
             }
         }
         Task.addTaskCount();
