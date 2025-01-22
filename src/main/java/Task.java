@@ -12,6 +12,9 @@ public abstract class Task {
         Task.taskCount++;
     }
 
+    public static void reduceTaskCount() { Task.taskCo
+    unt--; }
+
     public void mark() {
         this.isDone = true;
     }
