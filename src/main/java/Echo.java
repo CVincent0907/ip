@@ -18,10 +18,6 @@ public class Echo {
         while (true) {
             String input = sc.nextLine();
 
-
-            //The code is not working as expected
-            //System.out.println(input.trim());
-
             // SHOULD ADD AN ERROR HANDLING FOR THIS (currently: list 1/ list 2 also OK... future extension maybe what if list 2: the first two are displayed)
             // This deals with empty command or mutliple spaces without command
             if (input.trim().isEmpty()) {
