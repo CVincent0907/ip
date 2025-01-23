@@ -14,83 +14,101 @@ public class Echo {
         Scanner sc = new Scanner(System.in);
 
         // ErrorCode added in to handle the command which is NOT TODO, DEADLINE, EVENT
+        label:
         while (true) {
             String input = sc.nextLine();
-            String[] parts = input.split(" ");
-            String part = parts[0];
-            int len = parts.length;
+
+
+            //The code is not working as expected
+            //System.out.println(input.trim());
 
             // SHOULD ADD AN ERROR HANDLING FOR THIS (currently: list 1/ list 2 also OK... future extension maybe what if list 2: the first two are displayed)
-            if (Objects.equals(part.toLowerCase(), "list")) {
-                Echo.list();
-            } else if (Objects.equals(part.toLowerCase(), "mark")) {
-
-                if (len == 1){
-                    System.out.println("    There must be an integer after mark !");
-                } else {
-                    try {
-                        Echo.markRemark(Integer.parseInt(parts[1]));
-                    } catch (NumberFormatException e) {
-                        System.out.println("    -------------------------------------------------");
-                        System.out.println("    " + e.getMessage());
-                        System.out.println("    The argument should be an integer!");
-                        System.out.println("    -------------------------------------------------");
-                    } finally {
-
-                    }
-                }
-
-            } else if (Objects.equals(part.toLowerCase(), "unmark")) {
-
-                if (len == 1){
-                    System.out.println("    There must be an integer after unmark !");
-                } else {
-                    try {
-                        Echo.unmarkRemark(Integer.parseInt(parts[1]));
-                    } catch (NumberFormatException e) {
-                        System.out.println("    -------------------------------------------------");
-                        System.out.println("    " + e.getMessage());
-                        System.out.println("    The argument should be an integer!");
-                        System.out.println("    -------------------------------------------------");
-                    } finally {
-
-                    }
-                }
-
-            } else if (Objects.equals(part.toLowerCase(), "bye")) {
-                break;
-            } else if (Objects.equals(part.toLowerCase(), "delete")) {
-                if (len == 1){
-                    System.out.println("    There must be an integer after delete !");
-                } else {
-                    try {
-                        Echo.delete(Integer.parseInt(parts[1]));
-                    } catch (NumberFormatException e) {
-                        System.out.println("    -------------------------------------------------");
-                        System.out.println("    " + e.getMessage());
-                        System.out.println("    The argument should be an integer!");
-                        System.out.println("    -------------------------------------------------");
-                    } finally {
-
-                    }
-                }
+            // This deals with empty command or mutliple spaces without command
+            if (input.trim().isEmpty()) {
+                System.out.println("    -------------------------------------------------");
+                System.out.println("    System does not support such command. Only todo ..., deadline ..., event..., mark..., unmark..., delete... and list and bye only !");
             } else {
-                int errorCode = Echo.add(input);
-                // should also specify input format to user also like from ... /to ....
-                switch (errorCode) {
-                    case 0:
-                        System.out.println("    System does not support such command. Only todo ..., deadline ..., event..., mark..., unmark..., delete... and list and bye only !");
+                String[] parts = input.split(" ");
+                String part = parts[0];
+                int len = parts.length;
+
+                switch (part.toLowerCase()) {
+                    case "list":
+                        Echo.list();
                         break;
-                    case -1:
-                        System.out.println("    There must be something after todo !");
+                    case "mark":
+
+                        if (len == 1) {
+                            System.out.println("    There must be an integer after mark !");
+                        } else {
+                            try {
+                                Echo.markRemark(Integer.parseInt(parts[1]));
+                            } catch (NumberFormatException e) {
+                                System.out.println("    -------------------------------------------------");
+                                System.out.println("    " + e.getMessage());
+                                System.out.println("    The argument should be an integer!");
+                                System.out.println("    -------------------------------------------------");
+                            } finally {
+
+                            }
+                        }
+
                         break;
-                    case -2:
-                        System.out.println("    There must be something after deadline !");
+                    case "unmark":
+
+                        if (len == 1) {
+                            System.out.println("    There must be an integer after unmark !");
+                        } else {
+                            try {
+                                Echo.unmarkRemark(Integer.parseInt(parts[1]));
+                            } catch (NumberFormatException e) {
+                                System.out.println("    -------------------------------------------------");
+                                System.out.println("    " + e.getMessage());
+                                System.out.println("    The argument should be an integer!");
+                                System.out.println("    -------------------------------------------------");
+                            } finally {
+
+                            }
+                        }
+
                         break;
-                    case -3:
-                        System.out.println("    There must be something after event !");
+                    case "bye":
+                        break label;
+                    case "delete":
+                        if (len == 1) {
+                            System.out.println("    There must be an integer after delete !");
+                        } else {
+                            try {
+                                Echo.delete(Integer.parseInt(parts[1]));
+                            } catch (NumberFormatException e) {
+                                System.out.println("    -------------------------------------------------");
+                                System.out.println("    " + e.getMessage());
+                                System.out.println("    The argument should be an integer!");
+                                System.out.println("    -------------------------------------------------");
+                            } finally {
+
+                            }
+                        }
                         break;
                     default:
+                        int errorCode = Echo.add(input);
+                        // should also specify input format to user also like from ... /to ....
+                        switch (errorCode) {
+                            case 0:
+                                System.out.println("    System does not support such command. Only todo ..., deadline ..., event..., mark..., unmark..., delete... and list and bye only !");
+                                break;
+                            case -1:
+                                System.out.println("    There must be something after todo !");
+                                break;
+                            case -2:
+                                System.out.println("    There must be something after deadline !");
+                                break;
+                            case -3:
+                                System.out.println("    There must be something after event !");
+                                break;
+                            default:
+                        }
+                        break;
                 }
             }
         }
