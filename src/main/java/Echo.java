@@ -24,8 +24,7 @@ public class Echo {
         } finally {
 
         }
-
-
+        
         Scanner sc = new Scanner(System.in);
 
         // ErrorCode added in to handle the command which is NOT TODO, DEADLINE, EVENT
