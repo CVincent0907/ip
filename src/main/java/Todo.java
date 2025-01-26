@@ -1,5 +1,7 @@
 public class Todo extends Task {
-    public static final String regex = "(?i)^todo\\s+(.+)$";
+    public static final String REGEX_1 = "(?i)^todo\\s+(.+)$";
+    public static final String REGEX_2 = "\\[T\\]\\[(X| )\\] (.*)";
+
     public Todo(String description) {
         super(description);
     }
