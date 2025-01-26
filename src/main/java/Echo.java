@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +17,7 @@ public class Echo {
         while (true) {
             String input = sc.nextLine();
 
-            // SHOULD ADD AN ERROR HANDLING FOR THIS (currently: list 1/ list 2 also OK... future extension maybe what if list 2: the first two are displayed)
+            // SHOULD ADD AN ERROR HANDLING FOR THIS (currently: list 1/ list 2 also OK... future extension maybe what if list 2: the first two are displayed) TODO
             // This deals with empty command or mutliple spaces without command
             if (input.trim().isEmpty()) {
                 System.out.println("    -------------------------------------------------");
@@ -29,85 +28,91 @@ public class Echo {
                 int len = parts.length;
 
                 switch (part.toLowerCase()) {
-                    case "list":
-                        Echo.list();
-                        break;
-                    case "mark":
+                case "list":
+                    Echo.list();
+                    break;
+                case "mark":
 
-                        if (len == 1) {
-                            System.out.println("    There must be an integer after mark !");
-                        } else {
-                            try {
-                                Echo.markRemark(Integer.parseInt(parts[1]));
-                            } catch (NumberFormatException e) {
-                                System.out.println("    -------------------------------------------------");
-                                System.out.println("    " + e.getMessage());
-                                System.out.println("    The argument should be an integer!");
-                                System.out.println("    -------------------------------------------------");
-                            } finally {
+                    if (len == 1) {
+                        System.out.println("    There must be an integer after mark !");
+                    } else {
+                        try {
+                            Echo.markRemark(Integer.parseInt(parts[1]));
+                        } catch (NumberFormatException e) {
+                            System.out.println("    -------------------------------------------------");
+                            System.out.println("    " + e.getMessage());
+                            System.out.println("    The argument should be an integer!");
+                            System.out.println("    -------------------------------------------------");
+                        } finally {
 
-                            }
                         }
+                    }
 
-                        break;
-                    case "unmark":
+                    break;
+                case "unmark":
 
-                        if (len == 1) {
-                            System.out.println("    There must be an integer after unmark !");
-                        } else {
-                            try {
-                                Echo.unmarkRemark(Integer.parseInt(parts[1]));
-                            } catch (NumberFormatException e) {
-                                System.out.println("    -------------------------------------------------");
-                                System.out.println("    " + e.getMessage());
-                                System.out.println("    The argument should be an integer!");
-                                System.out.println("    -------------------------------------------------");
-                            } finally {
+                    if (len == 1) {
+                        System.out.println("    There must be an integer after unmark !");
+                    } else {
+                        try {
+                            Echo.unmarkRemark(Integer.parseInt(parts[1]));
+                        } catch (NumberFormatException e) {
+                            System.out.println("    -------------------------------------------------");
+                            System.out.println("    " + e.getMessage());
+                            System.out.println("    The argument should be an integer!");
+                            System.out.println("    -------------------------------------------------");
+                        } finally {
 
-                            }
                         }
+                    }
 
-                        break;
-                    case "bye":
-                        break label;
-                    case "delete":
-                        if (len == 1) {
-                            System.out.println("    There must be an integer after delete !");
-                        } else {
-                            try {
-                                Echo.delete(Integer.parseInt(parts[1]));
-                            } catch (NumberFormatException e) {
-                                System.out.println("    -------------------------------------------------");
-                                System.out.println("    " + e.getMessage());
-                                System.out.println("    The argument should be an integer!");
-                                System.out.println("    -------------------------------------------------");
-                            } finally {
+                    break;
+                case "bye":
+                    break label;
+                case "delete":
+                    if (len == 1) {
+                        System.out.println("    There must be an integer after delete !");
+                    } else {
+                        try {
+                            Echo.delete(Integer.parseInt(parts[1]));
+                        } catch (NumberFormatException e) {
+                            System.out.println("    -------------------------------------------------");
+                            System.out.println("    " + e.getMessage());
+                            System.out.println("    The argument should be an integer!");
+                            System.out.println("    -------------------------------------------------");
+                        } finally {
 
-                            }
                         }
+                    }
+                    break;
+                default:
+                    int errorCode = Echo.add(input);
+                    final int ERROR_CODE_UNKNOWN_COMMAND = 0;
+                    final int ERROR_CODE_TODO_COMMAND = 1;
+                    final int ERROR_CODE_DEADLINE_COMMAND = 2;
+                    final int ERROR_CODE_EVENT_COMMAND = 3;
+
+                    // should also specify input format to user also like from ... /to .... TODO
+                    switch (errorCode) {
+                    case ERROR_CODE_UNKNOWN_COMMAND:
+                        System.out.println("    System does not support such command. Only todo ..., deadline ..., event..., mark..., unmark..., delete... and list and bye only !");
+                        break;
+                    case ERROR_CODE_TODO_COMMAND:
+                        System.out.println("    There must be something after todo !");
+                        break;
+                    case ERROR_CODE_DEADLINE_COMMAND:
+                        System.out.println("    There must be something after deadline !");
+                        break;
+                    case ERROR_CODE_EVENT_COMMAND:
+                        System.out.println("    There must be something after event !");
                         break;
                     default:
-                        int errorCode = Echo.add(input);
-                        // should also specify input format to user also like from ... /to ....
-                        switch (errorCode) {
-                            case 0:
-                                System.out.println("    System does not support such command. Only todo ..., deadline ..., event..., mark..., unmark..., delete... and list and bye only !");
-                                break;
-                            case -1:
-                                System.out.println("    There must be something after todo !");
-                                break;
-                            case -2:
-                                System.out.println("    There must be something after deadline !");
-                                break;
-                            case -3:
-                                System.out.println("    There must be something after event !");
-                                break;
-                            default:
-                        }
-                        break;
+                    }
+                    break;
                 }
             }
         }
+        
 
         System.out.println("-------------------------------------------------");
         System.out.println(ending);
@@ -121,7 +126,7 @@ public class Echo {
         System.out.println("    -------------------------------------------------");
         System.out.println("    Here are the tasks in your list:");
         for (int i = 0; i < Task.getTaskCount(); i++) {
-            System.out.println("    " + (i+1) + ". " + Echo.taskArray.get(i));
+            System.out.println("    " + (i + 1) + ". " + Echo.taskArray.get(i));
         }
         System.out.println("    -------------------------------------------------");
     }
@@ -129,23 +134,23 @@ public class Echo {
     // This is an overloaded list function that use to mark and display task by receiving input
     // input1: task order input2: mark or unmark(true or false) input3: String msg (congratz or humiliating msg based on completion)
     public static void list(Integer i, boolean mark, String msg) {
-        if (i <= Task.getTaskCount() && i!=0) {
+        if (i <= Task.getTaskCount() && i != 0) {
             if (mark) {
-                Echo.taskArray.get(i-1).mark();
+                Echo.taskArray.get(i - 1).mark();
             } else {
-                Echo.taskArray.get(i-1).unmark();
+                Echo.taskArray.get(i - 1).unmark();
             }
             System.out.println("    -------------------------------------------------");
             System.out.println(msg + i + " .");
             for (int j = 0; j < Task.getTaskCount(); j++) {
-                System.out.println("    " + (j+1) + ". " + Echo.taskArray.get(j));
+                System.out.println("    " + (j + 1) + ". " + Echo.taskArray.get(j));
             }
             System.out.println("    -------------------------------------------------");
         } else {
             System.out.println("    -------------------------------------------------");
             System.out.println("You do not have task " + i + "!");
             for (int j = 0; j < Task.getTaskCount(); j++) {
-                System.out.println("    " + (j+1) + ". " + Echo.taskArray.get(j));
+                System.out.println("    " + (j + 1) + ". " + Echo.taskArray.get(j));
             }
             System.out.println("    -------------------------------------------------");
         }
@@ -193,11 +198,12 @@ public class Echo {
     // This is a delete function where user can use it to delete task
     // input1: An integer
 
-    public static void delete(Integer i) throws NumberFormatException {
+    public static void delete(Integer i)
+            throws NumberFormatException {
         System.out.println("    -------------------------------------------------");
-        if (i <= Task.getTaskCount() && i!=0) {
-            String message = String.format("    %s", Echo.taskArray.get(i-1).toString());
-            Echo.taskArray.remove(i-1);
+        if (i <= Task.getTaskCount() && i != 0) {
+            String message = String.format("    %s", Echo.taskArray.get(i - 1).toString());
+            Echo.taskArray.remove(i - 1);
             Task.reduceTaskCount();
             System.out.println("    Hey bro! I have removed task " + i + ".");
             System.out.println(message);
