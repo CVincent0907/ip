@@ -2,29 +2,36 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class Echo {
     private static final ArrayList<Task> TASK_ARRAY = new ArrayList<>();
     private static final String PATH = "src/main/data/TearIT.txt";
 
-    //This function receives TearIt.ending as String input
-    //This function prints out echo and ending message when user enter "bye"
-    //input1: the ending messaged passed from tearIT
+    //  This function receives TearIt.ending as String input
+    //  This function prints out echo and ending message when user enter "bye"
+    //  input1: the ending messaged passed from tearIT
     public static void echo(String ending) {
 
+        //  Retrieve previous task history from a file
         try {
             Echo.readFromFile(Echo.PATH);
         } catch (FileNotFoundException e) {
             System.out.println("The file does not exist !");
+            System.out.println("Please follow the path src/main/data to data directory .");
+            System.out.println("Under data directory: Create a file, TearIT.txt .");
+            System.exit(1);
         } finally {
 
         }
-        
+
         Scanner sc = new Scanner(System.in);
 
         // ErrorCode added in to handle the command which is NOT TODO, DEADLINE, EVENT
@@ -85,7 +92,7 @@ public class Echo {
                 case "bye":
 
                     try {
-                            Echo.writeToFile(Echo.PATH);
+                        Echo.writeToFile(Echo.PATH);
                     } catch (IOException e) {
                         System.out.println("    Something went wrong: " + e.getMessage());
                         System.out.println("    The data is not saved !");
@@ -189,29 +196,34 @@ public class Echo {
         System.out.println("    -------------------------------------------------");
         String[] parts = input.split(" ");
         int len = parts.length;
+        boolean flag;
 
         if (input.toLowerCase().startsWith("todo")) {
             if (len <= 1) {
                 return -1;
             }
-           Echo.extractAndCreate(input, Todo.regex, 1);
+            flag = Echo.extractAndCreateTask(input, Todo.REGEX_1, 1);
         } else if (input.toLowerCase().startsWith("deadline")) {
             if (len <= 1) {
                 return -2;
             }
-            Echo.extractAndCreate(input, Deadline.regex, 2);
+            flag = Echo.extractAndCreateTask(input, Deadline.DATE_TIME_REGEX_1, 2);
         } else if (input.toLowerCase().startsWith("event")) {
             if (len <= 1) {
                 return -3;
             }
-            Echo.extractAndCreate(input, Event.regex, 3);
+            flag = Echo.extractAndCreateTask(input, Event.DATE_TIME_REGEX_1, 3);
         } else {
             return 0;
         }
 
-        System.out.println("    Got it. I've added this task:");
-        String message1 = String.format("       %s", Echo.TASK_ARRAY.get(Task.getTaskCount()-1));
-        System.out.println(message1);
+        if (flag) {
+            System.out.println("    Got it. I've added this task:");
+            String message1 = String.format("       %s", Echo.TASK_ARRAY.get(Task.getTaskCount() - 1));
+            System.out.println(message1);
+        } else {
+            System.out.println("    Task creation unsuccessful !");
+        }
 
         String message2 = String.format("    Now you have %d tasks in the list.", Task.getTaskCount());
         System.out.println(message2);
@@ -223,8 +235,7 @@ public class Echo {
     // This is a delete function where user can use it to delete task
     // input1: An integer
 
-    private static void delete(Integer i)
-            throws NumberFormatException {
+    private static void delete(Integer i) throws NumberFormatException {
         System.out.println("    -------------------------------------------------");
         if (i <= Task.getTaskCount() && i != 0) {
             String message = String.format("    %s", Echo.TASK_ARRAY.get(i - 1).toString());
@@ -255,7 +266,7 @@ public class Echo {
     // This function extract the info from user input via regex and create the corresponding task object
     // This function also adds taskCount for all objects created here [ie: only Deadline, Event, Todo]
     // input1:regex input2:userinput input3: number of needed group
-    private static void extractAndCreate(String userInput, String regex, int groups ) {
+    private static boolean extractAndCreateTask(String userInput, String regex, int groups) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(userInput);
 
@@ -263,24 +274,37 @@ public class Echo {
             if (groups == 1) {
                 Echo.TASK_ARRAY.add(new Todo(matcher.group(1)));
             } else if (groups == 2) {
-                Echo.TASK_ARRAY.add(new Deadline(matcher.group(1), matcher.group(2)));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HHmm");
+                Echo.TASK_ARRAY.add(new Deadline(matcher.group(1), LocalDateTime.parse(matcher.group(2), formatter)));
             } else {
-                Echo.TASK_ARRAY.add(new Event(matcher.group(1), matcher.group(2), matcher.group(3)));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HHmm");
+                Echo.TASK_ARRAY.add(new Event(matcher.group(1), LocalDateTime.parse(matcher.group(2), formatter), LocalDateTime.parse(matcher.group(2), formatter)));
             }
+            Task.addTaskCount();
+            return true;
+
+        } else {
+            System.out.println("    Input format is incorrect.");
+            System.out.println("    todo input format :todo XX");
+            System.out.println("    deadline input format :deadline XX /by dd-mm-yyyy hhmm");
+            System.out.println("    deadline input format :deadline XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm");
+            return false;
+
         }
-        Task.addTaskCount(); // TODO this can be done when new task created in respective task class
+
     }
 
 
     // This function is used to extract test file string line by line into a task object
     // input1: task string from text file
-    public static void extractTask(String task) {
+    public static void extractTaskFromFile(String task) {
 
         if (!Objects.equals(task, "")) {
             // Regex for each task type
-            Pattern todoPattern = Pattern.compile("\\[T\\]\\[(X| )\\] (.*)");
-            Pattern deadlinePattern = Pattern.compile("\\[D\\]\\[(X| )\\] (.*) \\(by: (.*)\\)");
-            Pattern eventPattern = Pattern.compile("\\[E\\]\\[(X| )\\] (.*) \\(from: (.*) to: (.*)\\)");
+            Pattern todoPattern = Pattern.compile(Todo.REGEX_2);
+            Pattern deadlinePattern = Pattern.compile(Deadline.DATE_TIME_REGEX_2);
+            Pattern eventPattern = Pattern.compile(Event.DATE_TIME_REGEX_2);
+
 
             Matcher todoMatcher = todoPattern.matcher(task);
             Matcher deadlineMatcher = deadlinePattern.matcher(task);
@@ -299,7 +323,8 @@ public class Echo {
             // Match Deadline task
             if (deadlineMatcher.matches()) {
                 boolean isDone = deadlineMatcher.group(1).equals("X");
-                TASK_ARRAY.add(new Deadline(deadlineMatcher.group(2), deadlineMatcher.group(3)));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy hh a", Locale.ENGLISH);
+                TASK_ARRAY.add(new Deadline(deadlineMatcher.group(2), LocalDateTime.parse(deadlineMatcher.group(3), formatter)));
                 if (isDone) {
                     TASK_ARRAY.get(Task.getTaskCount()).mark();
                 }
@@ -308,7 +333,8 @@ public class Echo {
             // Match Event task
             if (eventMatcher.matches()) {
                 boolean isDone = eventMatcher.group(1).equals("X");
-                TASK_ARRAY.add(new Event(eventMatcher.group(2), eventMatcher.group(3), eventMatcher.group(4)));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy hh a", Locale.ENGLISH);
+                TASK_ARRAY.add(new Event(eventMatcher.group(2), LocalDateTime.parse(eventMatcher.group(3), formatter), LocalDateTime.parse(eventMatcher.group(4), formatter)));
                 if (isDone) {
                     TASK_ARRAY.get(Task.getTaskCount()).mark();
                 }
@@ -331,7 +357,7 @@ public class Echo {
         File f = new File(filePath);
         Scanner s = new Scanner(f);
         while (s.hasNext()) {
-            Echo.extractTask(s.nextLine());
+            Echo.extractTaskFromFile(s.nextLine());
         }
     }
 
