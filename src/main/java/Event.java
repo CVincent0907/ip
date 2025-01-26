@@ -1,20 +1,26 @@
-public class Event extends Task{
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    private final String fromTime;
-    private final String toTime;
-    // This regex DOES NOT allow from 12/7/2028 but instead 12-8-2025
-    // NEED TO FIND WAY TO ADDRESS IT
-    public static final  String regex = "(?i)^event\\s+([^/]+)\\s+/from\\s+([^/]+)\\s+/to\\s+(.+)$";
+public class Event extends Task {
 
-    public Event(String description, String fromTime, String toTime) {
+    private final LocalDateTime fromTime;
+    private final LocalDateTime toTime;
+    public static final String DATE_TIME_REGEX_1 =
+            "event\\s+(.*?)\\s+/from\\s+(\\d{1,2}-\\d{1,2}-\\d{4}\\s+\\d{4})\\s+/to\\s+(\\d{1,2}-\\d{1,2}-\\d{4})";
+    public static final String DATE_TIME_REGEX_2 = "\\[E\\]\\[(X| )\\] (.*?) \\(from: (\\w+ \\d{1,2} \\d{4} \\d{1,2} " +
+            "[APMapm]{2}) to: (\\w+ \\d{1,2} \\d{4} \\d{1,2} [APMapm]{2})\\)";
+
+
+    public Event(String description, LocalDateTime fromTime, LocalDateTime toTime) {
         super(description);
         this.fromTime = fromTime;
         this.toTime = toTime;
 
     }
 
+
     @Override
     public String toString() {
-        return String.format("[E]%s (from: %s to: %s)",super.toString(), this.fromTime, this.toTime);
+        return String.format("[E]%s (from: %s to: %s)", super.toString(), this.fromTime.format(DateTimeFormatter.ofPattern("MMM d yyyy hh a")), this.toTime.format(DateTimeFormatter.ofPattern("MMM d yyyy hh a")));
     }
 }
