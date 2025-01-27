@@ -28,7 +28,7 @@ test {
 }
 
 application {
-    mainClass.set("seedu.duke.Duke")
+    mainClass.set("TearIT") // entry -> do not need to state src/java just like package
 }
 
 shadowJar {
