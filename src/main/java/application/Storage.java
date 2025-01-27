@@ -9,8 +9,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Storage class contains methods to read from storage (e.g. files), write
+ * to storage and also create storage when it does not exist.
+ */
+
 public class Storage {
     //private static final String PATH = "src/main/data/TearIT.txt";
+
+    /**
+     * Writes each task's info to text file one step before exiting the system upon "bye" command.
+     *
+     * @throws IOException Throws IOException whenever files written to is corrupted.
+     */
     public static void writeToFile() throws IOException {
         FileWriter fw = new FileWriter(Storage.getPath(), false); //overwrite them
         for (int i = 0; i < Task.getTaskCount(); i++) {
@@ -19,6 +30,11 @@ public class Storage {
         fw.close();
     }
 
+    /**
+     * Read the text from text file and convert each line of text into its corresponding task object.
+     *
+     * @throws FileNotFoundException Throws FileNotFoundException when files read from does not exist.
+     */
     public static void readFromFile() throws FileNotFoundException {
         File f = new File(Storage.getPath());
         if (!f.exists()) {
@@ -31,6 +47,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Create a file named TearIT.txt under a created directory named data when TearIT.txt does not exist under current working directory.
+     *
+     * @throws IOException Throws IOException if file or directory could not be created when TearIT.txt does not exist.
+     */
     public static void createFileIfNotExists() throws IOException {
         File file = new File(Storage.getPath());
 

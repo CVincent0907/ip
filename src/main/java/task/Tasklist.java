@@ -3,12 +3,32 @@ package task;
 import application.Parser;
 import java.util.ArrayList;
 
+/**
+ * Tasklist class contains methods to deal with the tasklist such as add, delete, list and etc.
+ */
 public class Tasklist {
     private static final ArrayList<Task> TASK_LIST = new ArrayList<>();
 
-    // This function add every user input  except mark/list/bye as task to TASK_ARRAY
-    // If none of them match.... REMEMBER to add in handle (we only handle for TODO, DEADLINE and EVENT)
-    // Receive input 1: task description input 2: task type (event, deadline, todo)
+    /**
+     * Processes the given input string to add a task to the task list.
+     * <p>
+     * Depending on the input, this method handles different types of tasks:
+     * "todo", "deadline", or "event". It validates the input, extracts task
+     * details using regex, and adds the task to the task list if successful.
+     * It also prints feedback messages to the console about the operation's outcome.
+     *
+     * @param input The command string specifying the task to be added. It should
+     *              start with one of the keywords: "todo", "deadline", or "event",
+     *              followed by the relevant task details.
+     *              <ul>
+     *                  <li><code>1</code>: Task creation was successful.</li>
+     *                  <li><code>0</code>: The input did not start with a recognized keyword.</li>
+     *                  <li><code>-1</code>: The "todo" task type was specified but lacked details.</li>
+     *                  <li><code>-2</code>: The "deadline" task type was specified but lacked details.</li>
+     *                  <li><code>-3</code>: The "event" task type was specified but lacked details.</li>
+     *              </ul>
+     * @return An integer status code representing the result of the operation:
+     */
     public static int add(String input) {
         System.out.println("    -------------------------------------------------");
         String[] parts = input.split(" ");
@@ -49,15 +69,35 @@ public class Tasklist {
         return 1;
     }
 
-    // This is not an overloading function
-    // This function add task object directly to the tasklist
-    // input1: task object (todo, deadline, event)
+    /**
+     * Adds a task object directly to the task list.
+     * <p>
+     * This method appends the provided {@link Task} object (e.g., {@link Todo}, {@link Deadline}, or {@link Event})
+     * to the task list without any additional processing or validation.
+     *
+     * @param task The {@link Task} object to be added to the task list. It should be a valid task instance such as
+     *             {@link Todo}, {@link Deadline}, or {@link Event}.
+     */
     public static void add(Task task) {
         Tasklist.TASK_LIST.add(task);
     }
 
-    // This is a delete function where user can use it to delete task
-    // input1: An integer
+    /**
+     * Deletes a task from the task list based on its position.
+     * <p>
+     * This method removes the task at the specified position in the task list if the position is valid.
+     * It also updates the task count and provides console feedback about the operation.
+     *
+     * @param i The 1-based position of the task to be deleted. It must be greater than 0 and less than
+     *          or equal to the total number of tasks in the task list.
+     * @throws NumberFormatException If the input parameter is not a valid integer.
+     *
+     *                               <p>Console Output:</p>
+     *                               <ul>
+     *                                   <li>If the task is successfully deleted, the method prints the removed task and the updated task count.</li>
+     *                                   <li>If the specified position is invalid, it prints an error message indicating the task does not exist.</li>
+     *                               </ul>
+     */
     public static void delete(Integer i) throws NumberFormatException {
         System.out.println("    -------------------------------------------------");
         if (i <= Task.getTaskCount() && i != 0) {
@@ -74,8 +114,20 @@ public class Tasklist {
         System.out.println("    -------------------------------------------------");
     }
 
-    // This is a list function that display all task in TASK_ARRAY upon input list/LIST or its variant
-    // input:None
+    /**
+     * Displays all tasks in the task list.
+     * <p>
+     * This method prints a numbered list of all tasks currently stored in the task list to the console.
+     * Each task is displayed on a new line, prefixed with its position in the list (1-based index).
+     * The method also includes formatting lines for better readability.
+     *
+     * <p>Console Output:</p>
+     * <ul>
+     *     <li>A header indicating the start of the task list.</li>
+     *     <li>A numbered list of tasks in the order they are stored.</li>
+     *     <li>A footer indicating the end of the task list.</li>
+     * </ul>
+     */
     public static void list() {
         System.out.println("    -------------------------------------------------");
         System.out.println("    Here are the tasks in your list:");
@@ -85,8 +137,37 @@ public class Tasklist {
         System.out.println("    -------------------------------------------------");
     }
 
-    // This is an overloaded list function that use to mark and display task by receiving input
-    // input1: task order input2: mark or unmark(true or false) input3: String msg (congratz or humiliating msg based on completion)
+
+    /**
+     * Marks or unmarks a task in the task list and displays the updated list.
+     * <p>
+     * This overloaded version of the {@code list} method updates the completion status of a specified task
+     * and prints a message, followed by the updated task list. If the specified task does not exist, it
+     * displays an error message and still shows the current task list.
+     *
+     * @param i    The 1-based position of the task to mark or unmark. It must be greater than 0 and less
+     *             than or equal to the total number of tasks in the task list.
+     * @param mark {@code true} to mark the task as completed, or {@code false} to unmark it.
+     * @param msg  A custom message to display after marking/unmarking the task. This can include
+     *             congratulatory or humorous remarks based on the task's status.
+     *
+     *             <p>Console Output:</p>
+     *             <ul>
+     *                 <li>If the specified task is valid:
+     *                     <ul>
+     *                         <li>Marks/unmarks the task based on the {@code mark} parameter.</li>
+     *                         <li>Prints the custom message {@code msg} along with the task's position.</li>
+     *                         <li>Displays the updated list of tasks.</li>
+     *                     </ul>
+     *                 </li>
+     *                 <li>If the specified task is invalid:
+     *                     <ul>
+     *                         <li>Prints an error message indicating the task does not exist.</li>
+     *                         <li>Displays the current list of tasks.</li>
+     *                     </ul>
+     *                 </li>
+     *             </ul>
+     */
     public static void list(Integer i, boolean mark, String msg) {
         if (i <= Task.getTaskCount() && i != 0) {
             if (mark) {
@@ -110,30 +191,71 @@ public class Tasklist {
         }
     }
 
-    // This function marks the ith numbered task done and display it
-    // input1 : the order of task
+    /**
+     * Marks the specified task as done and displays it along with a congratulatory remark.
+     *
+     * @param i The 1-based position of the task to mark as done. It must be greater than 0 and less
+     *          than or equal to the total number of tasks in the task list.
+     *
+     *          <p>Console Output:</p>
+     *          <ul>
+     *              <li>Marks the specified task as done.</li>
+     *              <li>Prints a congratulatory message, "Well Done! You finished task {i}".</li>
+     *              <li>Displays the updated list of tasks.</li>
+     *          </ul>
+     */
     public static void markRemark(Integer i) {
         Tasklist.list(i, true, "    Well Done! You finished task ");
     }
 
-    // This function unmarks the ith numbered task done and display it
-    // input1 : the order of task
+    /**
+     * Unmarks the specified task as done and displays it along with a message of disappointment.
+     *
+     * @param i The 1-based position of the task to unmark. It must be greater than 0 and less
+     *          than or equal to the total number of tasks in the task list.
+     *
+     *          <p>Console Output:</p>
+     *          <ul>
+     *              <li>Unmarks the specified task as not done.</li>
+     *              <li>Prints a message, "Oh No! You haven't completed task {i}".</li>
+     *              <li>Displays the updated list of tasks.</li>
+     *          </ul>
+     */
     public static void unmarkRemark(Integer i) {
         Tasklist.list(i, false, "    Oh No! You haven't completed task ");
     }
 
-    // This function mark the task without remark (called when loading in file)
-    // input1: taskorder
+    /**
+     * Marks the specified task as done without displaying any message or list.
+     * <p>
+     * This method is used when tasks are being loaded from a file.
+     *
+     * @param i The 0-based index of the task to mark as done. It must be a valid index within
+     *          the task list.
+     */
     public static void mark (int i) {
         Tasklist.TASK_LIST.get(i).mark();
     }
 
-    // This function unmark the task without remark (called when loading in file)
-    // input1: taskorder
+    /**
+     * Unmarks the specified task as done without displaying any message or list.
+     * <p>
+     * This method is used when tasks are being loaded from a file.
+     *
+     * @param i The 0-based index of the task to unmark as not done. It must be a valid index
+     *          within the task list.
+     */
     public static void unmark(int i) {
         Tasklist.TASK_LIST.get(i).unmark();
     }
 
+    /**
+     * Retrieves the string representation of the specified task.
+     *
+     * @param i The 0-based index of the task to retrieve. It must be a valid index within the
+     *          task list.
+     * @return A string representation of the specified task.
+     */
     public static String getTaskString(int i) {
         return Tasklist.TASK_LIST.get(i).toString();
     }

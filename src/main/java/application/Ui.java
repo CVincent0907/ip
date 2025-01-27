@@ -5,11 +5,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Ui class contains function to simulate the interactions between system and user in the application.
+ */
 public class Ui {
 
-    //  This function receives TearIt.ending as String input
-    //  This function prints out echo and ending message when user enter "bye"
-    //  input1: the ending messaged passed from tearIT
+    /**
+     * Simulates a system to interact with user via command prompt.
+     *
+     * @param ending Ending message received from <code>TearIT.java.</code>.
+     */
     public static void echo(String ending) {
         try {
             Storage.readFromFile();

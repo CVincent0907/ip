@@ -12,11 +12,23 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Parser class contains methods to parse user's inputs from the command prompt or
+ * to parse inputs from text file and convert the inputs into respective task objects
+ * when it matches the specified regex.
+ */
+
 public class Parser {
 
-    // This function extract the info from user input via regex and create the corresponding task object
-    // This function also adds taskCount for all objects created here [ie: only task.Deadline, task.Event, task.Todo]
-    // input1:regex input2:userinput input3: number of needed group
+    /**
+     * @return <code>true</code> if task is successfully created and <code>false</code> otherwise.
+     * Status of task creation depends on the @param userInput and @param regex.
+     *
+     * @param userInput Input from the command prompt.
+     * @param regex     Regex expression to detect the group of possible @param userInput.
+     * @param groups    Group number of possible @param userInput [1:3] inclusive.
+     */
+
     public static boolean extractAndCreateTask(String userInput, String regex, int groups) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(userInput);
@@ -48,8 +60,12 @@ public class Parser {
 
     }
 
-    // This function is used to extract test file string line by line into a task object
-    // input1: task string from text file
+    /**
+     * @return  <code>true</code> if task is successfully extracted from file and <code>false</code> otherwise.
+     * Status of extraction will be <code>false</code> whenever none of the 3 specified regex expressions match the @param task string format.
+     *
+     * @param task Task information retrieved from text file.
+     */
     public static boolean extractTaskFromFile(String task) {
 
             // Regex for each task type
