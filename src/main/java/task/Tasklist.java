@@ -1,11 +1,14 @@
 package task;
 
-import application.Parser;
 import java.util.ArrayList;
+
+import application.Parser;
 
 /**
  * Tasklist class contains methods to deal with the tasklist such as add, delete, list and etc.
  */
+
+
 public class Tasklist {
     private static final ArrayList<Task> TASK_LIST = new ArrayList<>();
 
@@ -225,6 +228,7 @@ public class Tasklist {
         Tasklist.list(i, false, "    Oh No! You haven't completed task ");
     }
 
+
     /**
      * Marks the specified task as done without displaying any message or list.
      * <p>
@@ -233,7 +237,8 @@ public class Tasklist {
      * @param i The 0-based index of the task to mark as done. It must be a valid index within
      *          the task list.
      */
-    public static void mark (int i) {
+
+    public static void mark(int i) {
         Tasklist.TASK_LIST.get(i).mark();
     }
 

@@ -1,18 +1,19 @@
 package application;
 
-import task.Task;
-import task.Tasklist;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import task.Task;
+import task.Tasklist;
+
 /**
  * Storage class contains methods to read from storage (e.g. files), write
  * to storage and also create storage when it does not exist.
  */
+
 
 public class Storage {
     //private static final String PATH = "src/main/data/TearIT.txt";

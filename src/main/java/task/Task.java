@@ -10,6 +10,12 @@ public abstract class Task {
 
     private boolean isDone = false;
 
+
+    public Task(String description) {
+        this.description = description;
+    }
+
+
     /**
      * @return the total number of tasks that are successfully created.
      */
@@ -43,10 +49,6 @@ public abstract class Task {
      */
     public void unmark() {
         this.isDone = false;
-    }
-
-    public Task(String description) {
-        this.description = description;
     }
 
     @Override
