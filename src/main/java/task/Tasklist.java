@@ -1,7 +1,8 @@
 package task;
 
-import application.Parser;
 import java.util.ArrayList;
+
+import application.Parser;
 
 public class Tasklist {
     private static final ArrayList<Task> TASK_LIST = new ArrayList<>();
@@ -110,6 +111,16 @@ public class Tasklist {
         }
     }
 
+    // list the tasks found according to keyword
+    // input1: list contains found tasks with matching keyword
+    public static void list(ArrayList<Task> lst) {
+        int i = 1;
+        for (Task t : lst) {
+            System.out.println("    " + i + ". " + t.toString());
+            i++;
+        }
+    }
+
     // This function marks the ith numbered task done and display it
     // input1 : the order of task
     public static void markRemark(Integer i) {
@@ -124,7 +135,7 @@ public class Tasklist {
 
     // This function mark the task without remark (called when loading in file)
     // input1: taskorder
-    public static void mark (int i) {
+    public static void mark(int i) {
         Tasklist.TASK_LIST.get(i).mark();
     }
 
@@ -132,6 +143,19 @@ public class Tasklist {
     // input1: taskorder
     public static void unmark(int i) {
         Tasklist.TASK_LIST.get(i).unmark();
+    }
+
+    // This function returns ArrayList with tasks of matching keyword
+    // input1: userInput
+    public static ArrayList<Task> find(String input) {
+        ArrayList<Task> lst = new ArrayList<>();
+
+        for (Task t : TASK_LIST) {
+            if (t.getLowerCaseDescription().contains(input.toLowerCase())) {
+                lst.add(t);
+            }
+        }
+        return lst;
     }
 
     public static String getTaskString(int i) {
