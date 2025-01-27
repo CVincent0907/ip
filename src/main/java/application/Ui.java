@@ -11,15 +11,19 @@ public class Ui {
     //  This function prints out echo and ending message when user enter "bye"
     //  input1: the ending messaged passed from tearIT
     public static void echo(String ending) {
-
-        //  Retrieve previous task history from a file
         try {
-            Storage.readFromFile(Storage.getPath());
+            Storage.readFromFile();
         } catch (FileNotFoundException e) {
-            System.out.println("The file does not exist !");
-            System.out.println("Please follow the path src/main/data to data directory .");
-            System.out.println("Under data directory: Create a file, TearIT.txt .");
-            System.exit(1);
+
+            try {
+                Storage.createFileIfNotExists();
+            } catch (IOException e1) {
+                System.out.println("Error creating the file: " + e1.getMessage());
+                System.exit(1);  // Exit if unable to create the file
+            } finally {
+
+            }
+
         } finally {
 
         }
@@ -84,7 +88,7 @@ public class Ui {
                 case "bye":
 
                     try {
-                        Storage.writeToFile(Storage.getPath());
+                        Storage.writeToFile();
                     } catch (IOException e) {
                         System.out.println("    Something went wrong: " + e.getMessage());
                         System.out.println("    The data is not saved !");
