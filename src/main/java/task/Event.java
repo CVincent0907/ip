@@ -3,6 +3,9 @@ package task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Event class is one of the task type class extended from abstract class <code>Task.java</code>.
+ */
 public class Event extends Task {
 
     private final LocalDateTime fromTime;

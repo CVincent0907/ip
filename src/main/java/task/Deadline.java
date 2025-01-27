@@ -3,6 +3,10 @@ package task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Deadline class is one of the task type class extended from abstract class <code>Task.java</code>.
+ */
+
 public class Deadline extends Task {
     private final LocalDateTime deadline;
     public static final String DATE_TIME_REGEX_1 =
