@@ -8,7 +8,6 @@ import application.Parser;
  * Tasklist class contains methods to deal with the tasklist such as add, delete, list and etc.
  */
 
-
 public class Tasklist {
     private static final ArrayList<Task> TASK_LIST = new ArrayList<>();
 
@@ -194,6 +193,23 @@ public class Tasklist {
         }
     }
 
+
+    /**
+     * Lists the tasks that match the provided keyword.
+     * <p>
+     * This function iterates over the given list of tasks and displays each task
+     * with its index in the list.
+     *
+     * @param lst the list of tasks that match the search keyword
+     */
+    public static void list(ArrayList<Task> lst) {
+        int i = 1;
+        for (Task t : lst) {
+            System.out.println("    " + i + ". " + t.toString());
+            i++;
+        }
+    }
+
     /**
      * Marks the specified task as done and displays it along with a congratulatory remark.
      *
@@ -237,7 +253,6 @@ public class Tasklist {
      * @param i The 0-based index of the task to mark as done. It must be a valid index within
      *          the task list.
      */
-
     public static void mark(int i) {
         Tasklist.TASK_LIST.get(i).mark();
     }
@@ -252,6 +267,26 @@ public class Tasklist {
      */
     public static void unmark(int i) {
         Tasklist.TASK_LIST.get(i).unmark();
+    }
+
+    /**
+     * Searches for tasks that contain the given keyword in their descriptions.
+     * <p>
+     * This function iterates over all tasks in the task list and adds the tasks
+     * whose description contains the provided keyword (case-insensitive) to a new list.
+     *
+     * @param input the keyword to search for in task descriptions
+     * @return an ArrayList containing the tasks that match the keyword
+     */
+    public static ArrayList<Task> find(String input) {
+        ArrayList<Task> lst = new ArrayList<>();
+
+        for (Task t : TASK_LIST) {
+            if (t.getLowerCaseDescription().contains(input.toLowerCase())) {
+                lst.add(t);
+            }
+        }
+        return lst;
     }
 
     /**
