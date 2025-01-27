@@ -6,6 +6,10 @@ public abstract class Task {
 
     private boolean isDone = false;
 
+    public Task(String description) {
+        this.description = description;
+    }
+
     public static int getTaskCount() {
         return Task.taskCount;
     }
@@ -24,10 +28,6 @@ public abstract class Task {
 
     public void unmark() {
         this.isDone = false;
-    }
-
-    public Task(String description) {
-        this.description = description;
     }
 
     @Override

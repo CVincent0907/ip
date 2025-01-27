@@ -1,15 +1,13 @@
 package test;
 
-import org.junit.jupiter.api.Test;
-import task.Tasklist;
-
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class TasklistTest {
+import org.junit.jupiter.api.Test;
 
+import task.Tasklist;
+
+public class TasklistTest {
 
     // Test todo without any arg
     @Test

@@ -1,9 +1,10 @@
 package application;
 
-import task.Tasklist;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
+
+import task.Tasklist;
 
 public class Ui {
 
@@ -20,11 +21,7 @@ public class Ui {
             } catch (IOException e1) {
                 System.out.println("Error creating the file: " + e1.getMessage());
                 System.exit(1);  // Exit if unable to create the file
-            } finally {
-
             }
-
-        } finally {
 
         }
 
@@ -61,8 +58,6 @@ public class Ui {
                             System.out.println("    " + e.getMessage());
                             System.out.println("    The argument should be an integer!");
                             System.out.println("    -------------------------------------------------");
-                        } finally {
-
                         }
                     }
 
@@ -79,8 +74,6 @@ public class Ui {
                             System.out.println("    " + e.getMessage());
                             System.out.println("    The argument should be an integer!");
                             System.out.println("    -------------------------------------------------");
-                        } finally {
-
                         }
                     }
 
@@ -92,8 +85,6 @@ public class Ui {
                     } catch (IOException e) {
                         System.out.println("    Something went wrong: " + e.getMessage());
                         System.out.println("    The data is not saved !");
-                    } finally {
-
                     }
 
                     break label;
@@ -108,8 +99,6 @@ public class Ui {
                             System.out.println("    " + e.getMessage());
                             System.out.println("    The argument should be an integer!");
                             System.out.println("    -------------------------------------------------");
-                        } finally {
-
                         }
                     }
                     break;

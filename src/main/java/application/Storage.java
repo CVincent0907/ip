@@ -1,13 +1,13 @@
 package application;
 
-import task.Task;
-import task.Tasklist;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+
+import task.Task;
+import task.Tasklist;
 
 public class Storage {
     //private static final String PATH = "src/main/data/TearIT.txt";

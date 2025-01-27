@@ -1,16 +1,17 @@
 import application.Ui;
+
 public class TearIT {
 
     private static final String opening = """
             Hello! I'm TearIT.
             What can I do for you?
-            
+                        
             -------------------------------------------------""";
 
 
     private static final String ending = """
             Bye. Hope to see you again soon!
-           
+                       
             -------------------------------------------------""";
 
 
@@ -25,7 +26,6 @@ public class TearIT {
         System.out.println("-------------------------------------------------");
         System.out.println(TearIT.opening);
     }
-
 
 
 }

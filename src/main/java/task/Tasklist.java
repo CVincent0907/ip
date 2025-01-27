@@ -1,7 +1,8 @@
 package task;
 
-import application.Parser;
 import java.util.ArrayList;
+
+import application.Parser;
 
 public class Tasklist {
     private static final ArrayList<Task> TASK_LIST = new ArrayList<>();
@@ -124,7 +125,7 @@ public class Tasklist {
 
     // This function mark the task without remark (called when loading in file)
     // input1: taskorder
-    public static void mark (int i) {
+    public static void mark(int i) {
         Tasklist.TASK_LIST.get(i).mark();
     }
 
