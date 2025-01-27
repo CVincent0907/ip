@@ -1,5 +1,10 @@
+package application;
+
 import task.Deadline;
 import task.Event;
+import task.Task;
+import task.Todo;
+import task.Tasklist;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +16,7 @@ import java.util.regex.Pattern;
 public class Parser {
 
     // This function extract the info from user input via regex and create the corresponding task object
-    // This function also adds taskCount for all objects created here [ie: only task.Deadline, task.Event, Todo]
+    // This function also adds taskCount for all objects created here [ie: only task.Deadline, task.Event, task.Todo]
     // input1:regex input2:userinput input3: number of needed group
     public static boolean extractAndCreateTask(String userInput, String regex, int groups) {
         Pattern pattern = Pattern.compile(regex);
@@ -59,7 +64,7 @@ public class Parser {
             Matcher deadlineMatcher = deadlinePattern.matcher(task);
             Matcher eventMatcher = eventPattern.matcher(task);
 
-            // Match Todo task
+            // Match task.Todo task
             if (todoMatcher.matches()) {
                 boolean isDone = todoMatcher.group(1).equals("X");
                 Tasklist.add(new Todo(todoMatcher.group(2)));

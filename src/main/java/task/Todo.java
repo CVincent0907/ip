@@ -1,3 +1,5 @@
+package task;
+
 public class Todo extends Task {
     public static final String REGEX_1 = "(?i)^todo\\s+(.+)$";
     public static final String REGEX_2 = "\\[T\\]\\[(X| )\\] (.*)";

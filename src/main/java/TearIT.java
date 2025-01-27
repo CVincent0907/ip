@@ -1,4 +1,4 @@
-
+import application.Ui;
 public class TearIT {
 
     private static final String opening = """
