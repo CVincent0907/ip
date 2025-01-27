@@ -51,9 +51,8 @@ public class Parser {
 
     // This function is used to extract test file string line by line into a task object
     // input1: task string from text file
-    public static void extractTaskFromFile(String task) {
+    public static boolean extractTaskFromFile(String task) {
 
-        if (!Objects.equals(task, "")) {
             // Regex for each task type
             Pattern todoPattern = Pattern.compile(Todo.REGEX_2);
             Pattern deadlinePattern = Pattern.compile(Deadline.DATE_TIME_REGEX_2);
@@ -64,38 +63,33 @@ public class Parser {
             Matcher deadlineMatcher = deadlinePattern.matcher(task);
             Matcher eventMatcher = eventPattern.matcher(task);
 
-            // Match task.Todo task
-            if (todoMatcher.matches()) {
-                boolean isDone = todoMatcher.group(1).equals("X");
-                Tasklist.add(new Todo(todoMatcher.group(2)));
-                if (isDone) {
-                    Tasklist.mark(Task.getTaskCount());
+            if (todoMatcher.matches() || deadlineMatcher.matches() || eventMatcher.matches()) {
+                if (todoMatcher.matches()) {
+                    boolean isDone = todoMatcher.group(1).equals("X");
+                    Tasklist.add(new Todo(todoMatcher.group(2)));
+                    if (isDone) {
+                        Tasklist.mark(Task.getTaskCount());
+                    }
+                } else if (deadlineMatcher.matches()) {
+                    boolean isDone = deadlineMatcher.group(1).equals("X");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a", Locale.ENGLISH);
+                    Tasklist.add(new Deadline(deadlineMatcher.group(2), LocalDateTime.parse(deadlineMatcher.group(3), formatter)));
+                    if (isDone) {
+                        Tasklist.mark(Task.getTaskCount());
+                    }
+                } else if (eventMatcher.matches()) {
+                    boolean isDone = eventMatcher.group(1).equals("X");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy hh:mm a", Locale.ENGLISH);
+                    Tasklist.add(new Event(eventMatcher.group(2), LocalDateTime.parse(eventMatcher.group(3), formatter), LocalDateTime.parse(eventMatcher.group(4), formatter)));
+                    if (isDone) {
+                        Tasklist.mark(Task.getTaskCount());
+                    }
                 }
-
+                Task.addTaskCount();
+                return true;
+            } else {
+                return false;
             }
-
-            // Match task.Deadline task
-            if (deadlineMatcher.matches()) {
-                boolean isDone = deadlineMatcher.group(1).equals("X");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a", Locale.ENGLISH);
-                Tasklist.add(new Deadline(deadlineMatcher.group(2), LocalDateTime.parse(deadlineMatcher.group(3), formatter)));
-                if (isDone) {
-                    Tasklist.mark(Task.getTaskCount());
-                }
-            }
-
-            // Match task.Event task
-            if (eventMatcher.matches()) {
-                boolean isDone = eventMatcher.group(1).equals("X");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy hh:mm a", Locale.ENGLISH);
-                Tasklist.add(new Event(eventMatcher.group(2), LocalDateTime.parse(eventMatcher.group(3), formatter), LocalDateTime.parse(eventMatcher.group(4), formatter)));
-                if (isDone) {
-                    Tasklist.mark(Task.getTaskCount());
-                }
-            }
-
-            Task.addTaskCount();
-        }
-
     }
+
 }

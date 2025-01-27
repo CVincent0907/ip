@@ -23,7 +23,7 @@ public class Storage {
         File f = new File(filePath);
         Scanner s = new Scanner(f);
         while (s.hasNext()) {
-            Parser.extractTaskFromFile(s.nextLine());
+            boolean flag = Parser.extractTaskFromFile(s.nextLine());
         }
     }
 
