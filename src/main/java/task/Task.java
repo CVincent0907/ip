@@ -51,7 +51,6 @@ public abstract class Task {
         this.isDone = false;
     }
 
-
     public String getLowerCaseDescription() {
         return this.description.toLowerCase();
     }

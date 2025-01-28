@@ -30,5 +30,4 @@ public class TearIT {
         System.out.println(TearIT.opening);
     }
 
-
 }
