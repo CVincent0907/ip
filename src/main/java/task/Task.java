@@ -51,17 +51,11 @@ public abstract class Task {
         this.isDone = false;
     }
 
-<<<<<<< HEAD
-=======
+
     public String getLowerCaseDescription() {
         return this.description.toLowerCase();
     }
 
-    public Task(String description) {
-        this.description = description;
-    }
-
->>>>>>> branch-Level-9
     @Override
     public String toString() {
         if (this.isDone) {

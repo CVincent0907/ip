@@ -27,7 +27,6 @@ public class Parser {
      * @return <code>true</code> if task is successfully created and <code>false</code> otherwise.
      * Status of task creation depends on the @param userInput and @param regex.
      */
-
     public static boolean extractAndCreateTask(String userInput, String regex, int groups) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(userInput);

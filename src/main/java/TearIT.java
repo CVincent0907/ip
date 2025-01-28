@@ -1,5 +1,8 @@
 import application.Ui;
 
+/**
+ * TearIT is a class that provides entry point to the user interaction simulator.
+ */
 public class TearIT {
 
     private static final String opening = """

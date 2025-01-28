@@ -11,8 +11,6 @@ import task.Tasklist;
 /**
  * Ui class contains function to simulate the interactions between system and user in the application.
  */
-
-
 public class Ui {
 
     /**

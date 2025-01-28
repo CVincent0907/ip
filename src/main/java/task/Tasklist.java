@@ -7,7 +7,6 @@ import application.Parser;
 /**
  * Tasklist class contains methods to deal with the tasklist such as add, delete, list and etc.
  */
-
 public class Tasklist {
     private static final ArrayList<Task> TASK_LIST = new ArrayList<>();
 

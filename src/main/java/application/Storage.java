@@ -13,8 +13,6 @@ import task.Tasklist;
  * Storage class contains methods to read from storage (e.g. files), write
  * to storage and also create storage when it does not exist.
  */
-
-
 public class Storage {
     //private static final String PATH = "src/main/data/TearIT.txt";
 
@@ -49,7 +47,8 @@ public class Storage {
     }
 
     /**
-     * Create a file named TearIT.txt under a created directory named data when TearIT.txt does not exist under current working directory.
+     * Create a file named TearIT.txt under a created directory named data when TearIT.txt
+     * does not exist under current working directory.
      *
      * @throws IOException Throws IOException if file or directory could not be created when TearIT.txt does not exist.
      */

@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 /**
  * Deadline class is one of the task type class extended from abstract class <code>Task.java</code>.
  */
-
 public class Deadline extends Task {
     public static final String DATE_TIME_REGEX_1 =
             "deadline\\s+(.*?)\\s+/by\\s+(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\\d{4})\\s+(00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23)([0-5][0-9])";
