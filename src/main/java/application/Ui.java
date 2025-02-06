@@ -27,7 +27,7 @@ public class Ui {
                 Storage.createFileIfNotExists();
             } catch (IOException e1) {
                 System.out.println("Error creating the file: " + e1.getMessage());
-                System.exit(1);  // Exit if unable to create the file
+                System.exit(1); // Exit if unable to create the file
             }
 
         }
@@ -39,22 +39,26 @@ public class Ui {
         while (true) {
             String input = sc.nextLine();
 
-            // SHOULD ADD AN ERROR HANDLING FOR THIS (currently: list 1/ list 2 also OK... future extension maybe what if list 2: the first two are displayed) TODO
+            // SHOULD ADD AN ERROR HANDLING FOR THIS (currently: list 1/ list 2 also OK...
+            // future extension maybe what if list 2: the first two are displayed) TODO
             // This deals with empty command or mutliple spaces without command
             if (input.trim().isEmpty()) {
                 System.out.println("    -------------------------------------------------");
-                System.out.println("    System does not support such command. Only todo ..., deadline ..., event..., mark..., unmark..., delete..., find ... list and bye only !");
+                System.out.println("    System does not support such command. Only todo ..., "
+                        + "deadline ..., event..., mark..., unmark..., delete..., find ... list"
+                        + " and bye only !");
             } else {
                 String[] parts = input.split(" ");
                 String part = parts[0];
                 int len = parts.length;
 
                 switch (part.toLowerCase()) {
+
                 case "list":
                     Tasklist.list();
                     break;
-                case "mark":
 
+                case "mark":
                     if (len == 1) {
                         System.out.println("    There must be an integer after mark !");
                     } else {
@@ -67,10 +71,9 @@ public class Ui {
                             System.out.println("    -------------------------------------------------");
                         }
                     }
-
                     break;
-                case "unmark":
 
+                case "unmark":
                     if (len == 1) {
                         System.out.println("    There must be an integer after unmark !");
                     } else {
@@ -83,18 +86,17 @@ public class Ui {
                             System.out.println("    -------------------------------------------------");
                         }
                     }
-
                     break;
-                case "bye":
 
+                case "bye":
                     try {
                         Storage.writeToFile();
                     } catch (IOException e) {
                         System.out.println("    Something went wrong: " + e.getMessage());
                         System.out.println("    The data is not saved !");
                     }
-
                     break label;
+
                 case "delete":
                     if (len == 1) {
                         System.out.println("    There must be an integer after delete !");
@@ -109,6 +111,7 @@ public class Ui {
                         }
                     }
                     break;
+
                 case "find":
                     if (len == 1) {
                         System.out.println("    There must be an argument after find !");
@@ -124,6 +127,7 @@ public class Ui {
                         System.out.println("    -------------------------------------------------");
                     }
                     break;
+
                 default:
                     int errorCode = Tasklist.add(input);
                     final int ERROR_CODE_UNKNOWN_COMMAND = 0;
@@ -133,18 +137,25 @@ public class Ui {
 
                     // should also specify input format to user also like from ... /to .... TODO
                     switch (errorCode) {
+
                     case ERROR_CODE_UNKNOWN_COMMAND:
-                        System.out.println("    System does not support such command. Only todo ..., deadline ..., event..., mark..., unmark..., delete..., find... list and bye only !");
+                        System.out.println("    System does not support such command. Only todo ..., "
+                                + "deadline ..., event..., mark..., unmark..., delete..., find... list"
+                                + " and bye only !");
                         break;
+
                     case ERROR_CODE_TODO_COMMAND:
                         System.out.println("    There must be something after todo !");
                         break;
+
                     case ERROR_CODE_DEADLINE_COMMAND:
                         System.out.println("    There must be something after deadline !");
                         break;
+
                     case ERROR_CODE_EVENT_COMMAND:
                         System.out.println("    There must be something after event !");
                         break;
+                        
                     default:
                     }
                     break;

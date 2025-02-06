@@ -22,10 +22,10 @@ public class Parser {
 
     /**
      * @param userInput Input from the command prompt.
-     * @param regex     Regex expression to detect the group of possible @param userInput.
-     * @param groups    Group number of possible @param userInput [1:3] inclusive.
+     * @param regex     Regex expression to detect the group of possible userInput.
+     * @param groups    Group number of possible userInput [1:3] inclusive.
      * @return <code>true</code> if task is successfully created and <code>false</code> otherwise.
-     * Status of task creation depends on the @param userInput and @param regex.
+     *      Status of task creation depends on the userInput and regex.
      */
     public static boolean extractAndCreateTask(String userInput, String regex, int groups) {
         Pattern pattern = Pattern.compile(regex);
@@ -36,13 +36,20 @@ public class Parser {
                 Tasklist.add(new Todo(matcher.group(1)));
             } else if (groups == 2) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HHmm");
-                String deadline = matcher.group(2) + "-" + matcher.group(3) + "-" + matcher.group(4) + " " + matcher.group(5) + matcher.group(6);
+                String deadline = matcher.group(2) + "-" + matcher.group(3)
+                        + "-" + matcher.group(4) + " " + matcher.group(5)
+                        + matcher.group(6);
                 Tasklist.add(new Deadline(matcher.group(1), LocalDateTime.parse(deadline, formatter)));
             } else {
-                String fromDate = matcher.group(2) + "-" + matcher.group(3) + "-" + matcher.group(4) + " " + matcher.group(5) + matcher.group(6);  // "18-09-2024 1600"
-                String toDate = matcher.group(7) + "-" + matcher.group(8) + "-" + matcher.group(9) + " " + matcher.group(10) + matcher.group(11);  // "18-09-2024 1900"
+                String fromDate = matcher.group(2) + "-" + matcher.group(3)
+                        + "-" + matcher.group(4) + " " + matcher.group(5)
+                        + matcher.group(6); // "18-09-2024 1600"
+                String toDate = matcher.group(7) + "-" + matcher.group(8)
+                        + "-" + matcher.group(9) + " " + matcher.group(10)
+                        + matcher.group(11); // "18-09-2024 1900"
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HHmm");
-                Tasklist.add(new Event(matcher.group(1), LocalDateTime.parse(fromDate, formatter), LocalDateTime.parse(toDate, formatter)));
+                Tasklist.add(new Event(matcher.group(1), LocalDateTime.parse(fromDate, formatter),
+                        LocalDateTime.parse(toDate, formatter)));
             }
             Task.addTaskCount();
             return true;
@@ -61,7 +68,8 @@ public class Parser {
     /**
      * @param task Task information retrieved from text file.
      * @return <code>true</code> if task is successfully extracted from file and <code>false</code> otherwise.
-     * Status of extraction will be <code>false</code> whenever none of the 3 specified regex expressions match the @param task string format.
+     *      Status of extraction will be <code>false</code> whenever none of the 3 specified regex expressions
+     *      match the task string format.
      */
     public static boolean extractTaskFromFile(String task) {
 
@@ -84,15 +92,20 @@ public class Parser {
                 }
             } else if (deadlineMatcher.matches()) {
                 boolean isDone = deadlineMatcher.group(1).equals("X");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a", Locale.ENGLISH);
-                Tasklist.add(new Deadline(deadlineMatcher.group(2), LocalDateTime.parse(deadlineMatcher.group(3), formatter)));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a",
+                        Locale.ENGLISH);
+                Tasklist.add(new Deadline(deadlineMatcher.group(2),
+                        LocalDateTime.parse(deadlineMatcher.group(3), formatter)));
                 if (isDone) {
                     Tasklist.mark(Task.getTaskCount());
                 }
             } else if (eventMatcher.matches()) {
                 boolean isDone = eventMatcher.group(1).equals("X");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy hh:mm a", Locale.ENGLISH);
-                Tasklist.add(new Event(eventMatcher.group(2), LocalDateTime.parse(eventMatcher.group(3), formatter), LocalDateTime.parse(eventMatcher.group(4), formatter)));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy hh:mm a",
+                        Locale.ENGLISH);
+                Tasklist.add(new Event(eventMatcher.group(2),
+                        LocalDateTime.parse(eventMatcher.group(3), formatter),
+                        LocalDateTime.parse(eventMatcher.group(4), formatter)));
                 if (isDone) {
                     Tasklist.mark(Task.getTaskCount());
                 }
