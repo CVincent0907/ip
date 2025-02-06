@@ -1,7 +1,5 @@
 package test;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -37,7 +35,8 @@ public class ParserTest {
      */
     @Test
     public void extractAndCreateTask_deadlineInput_success() {
-        assertTrue(Parser.extractAndCreateTask("deadline task /by 18-09-2023 1800", Deadline.DATE_TIME_REGEX_1, 2));
+        assertTrue(Parser.extractAndCreateTask("deadline task /by 18-09-2023 1800",
+                Deadline.DATE_TIME_REGEX_1, 2));
     }
 
     /**
@@ -46,7 +45,8 @@ public class ParserTest {
      */
     @Test
     public void extractAndCreateTask_eventInput_success() {
-        assertTrue(Parser.extractAndCreateTask("event sport /from 18-09-2023 1800 /to 20-08-2024 1930", Event.DATE_TIME_REGEX_1, 3));
+        assertTrue(Parser.extractAndCreateTask("event sport /from 18-09-2023 1800 /to 20-08-2024 1930",
+                Event.DATE_TIME_REGEX_1, 3));
     }
 
     /**
@@ -55,7 +55,8 @@ public class ParserTest {
      */
     @Test
     public void extractAndCreateTask_deadlineInputUnformat_fail() {
-        assertFalse(Parser.extractAndCreateTask("deadline sport/ by 17:00", Deadline.DATE_TIME_REGEX_1, 2));
+        assertFalse(Parser.extractAndCreateTask("deadline sport/ by 17:00",
+                Deadline.DATE_TIME_REGEX_1, 2));
     }
 
     /**
@@ -64,7 +65,8 @@ public class ParserTest {
      */
     @Test
     public void extractAndCreateTask_deadlineInputInvalid_fail() {
-        assertFalse(Parser.extractAndCreateTask("deadline sport /by 19-13-2025 1830", Deadline.DATE_TIME_REGEX_1, 2));
+        assertFalse(Parser.extractAndCreateTask("deadline sport /by 19-13-2025 1830",
+                Deadline.DATE_TIME_REGEX_1, 2));
     }
 
     /**
@@ -73,7 +75,8 @@ public class ParserTest {
      */
     @Test
     public void extractAndCreateTask_eventInputUnformat_fail() {
-        assertFalse(Parser.extractAndCreateTask("event sport/from 18-09-2023 1800 /to 20-13-2024 1930", Event.DATE_TIME_REGEX_1, 3));
+        assertFalse(Parser.extractAndCreateTask("event sport/from 18-09-2023 1800 /to 20-13-2024 1930",
+                Event.DATE_TIME_REGEX_1, 3));
     }
 
     /**
@@ -82,7 +85,8 @@ public class ParserTest {
      */
     @Test
     public void extractAndCreateTask_eventInputInvalid_fail() {
-        assertFalse(Parser.extractAndCreateTask("event sport /from 18-09-2023 1800 /to 20-13-2024 1930", Event.DATE_TIME_REGEX_1, 3));
+        assertFalse(Parser.extractAndCreateTask("event sport /from 18-09-2023 1800 /to 20-13-2024 1930",
+                Event.DATE_TIME_REGEX_1, 3));
     }
 
     /**
