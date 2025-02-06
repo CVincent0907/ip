@@ -16,105 +16,113 @@ public class TasklistTest {
 
     /**
      * Tests adding a todo task without arguments.
-     * Expects a failure with a return value of -1.
+     * Expects a failure message indicating that something must be provided after "todo".
      */
     @Test
     public void add_toDoNoArg_fail() {
-        assertEquals(-1, Tasklist.add("todo "));
+        assertEquals("There must be something after \"todo\"!", Tasklist.add("todo "));
     }
 
     /**
      * Tests adding a todo task with valid arguments.
-     * Expects success with a return value of 1.
+     * Expects success with the task being added and a success message.
      */
     @Test
     public void add_toDoValidArg_success() {
-        assertEquals(1, Tasklist.add("todo read book"));
+        String expectedOutput = "Got it. I've added this task:\n   [T][ ] read book "
+                + "\nNow you have 3 tasks in the list.";
+        assertEquals(expectedOutput, Tasklist.add("todo read book"));
     }
 
-    /**
-     * Tests adding a todo task with invalid arguments.
-     * Expects success with a return value of 1.
-     */
-    @Test
-    public void add_toDoInValidArg_success() {
-        assertEquals(1, Tasklist.add("todo read book"));
-    }
 
 
     /**
      * Tests adding a deadline task without arguments.
-     * Expects a failure with a return value of -2.
+     * Expects a failure message indicating that something must be provided after "deadline".
      */
     @Test
     public void add_deadlineNoArg_fail() {
-        assertEquals(-2, Tasklist.add("deadline "));
+        assertEquals("There must be something after \"deadline\"!", Tasklist.add("deadline "));
     }
 
     /**
      * Tests adding a deadline task with valid arguments.
-     * Expects success with a return value of 1.
+     * Expects success with the task being added and a success message.
      */
     @Test
     public void add_deadlineValidArg_success() {
-        assertEquals(1, Tasklist.add("deadline read book /by 12-08-2024 1800"));
+        String expectedOutput = "Got it. I've added this task:\n   "
+                + "[D][ ] read book (by: Aug 12 2024 06:00 PM)\n"
+                + "Now you have 2 tasks in the list.";
+        assertEquals(expectedOutput, Tasklist.add("deadline read book /by 12-08-2024 1800"));
     }
 
     /**
      * Tests adding a deadline task with invalid arguments.
-     * Expects success with a return value of 1.
+     * Expects a failure message indicating incorrect input format.
      */
     @Test
-    public void add_deadlineInvalidArg_success() {
-        assertEquals(1, Tasklist.add("deadline read book /by12-08-2024 1800"));
+    public void add_deadlineInvalidArg_fail() {
+        String expectedError = "    Input format is incorrect.\n"
+                + "    todo input format :todo XX\n"
+                + "    deadline input format :deadline XX /by dd-mm-yyyy hhmm\n"
+                + "    deadline input format :deadline XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm";
+        assertEquals(expectedError, Tasklist.add("deadline read book /by12-08-2024 1800"));
     }
 
     /**
      * Tests adding an event task without arguments.
-     * Expects a failure with a return value of -3.
+     * Expects a failure message indicating that something must be provided after "event".
      */
     @Test
     public void add_eventNoArg_fail() {
-        assertEquals(-3, Tasklist.add("event "));
+        assertEquals("There must be something after \"event\"!", Tasklist.add("event "));
     }
-
 
     /**
      * Tests adding an event task with valid arguments.
-     * Expects success with a return value of 1.
+     * Expects success with the task being added and a success message.
      */
     @Test
     public void add_eventValidArg_success() {
-        assertEquals(1, Tasklist.add("event sport /from 12-08-2024 1800 /to 13-08-2024 1800"));
+        String expectedOutput = "Got it. I've added this task:\n   "
+                + "[E][ ] sport (from: Aug 12 2024 06:00 PM to: Aug 13 2024 06:00 PM)\n"
+                + "Now you have 1 tasks in the list.";
+        assertEquals(expectedOutput, Tasklist.add("event sport /from 12-08-2024 1800 /to 13-08-2024 1800"));
     }
 
     /**
      * Tests adding an event task with invalid arguments.
-     * Expects success with a return value of 1.
+     * Expects a failure message indicating incorrect input format.
      */
     @Test
-    public void add_eventInvalidArg_success() {
-        assertEquals(1, Tasklist.add("event sport /from12-08-2024 1800 /to 13-08-2024 1800"));
+    public void add_eventInvalidArg_fail() {
+        String expectedError = "    Input format is incorrect.\n"
+                + "    todo input format :todo XX\n"
+                + "    deadline input format :deadline XX /by dd-mm-yyyy hhmm\n"
+                + "    deadline input format :deadline XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm";
+        assertEquals(expectedError, Tasklist.add("event sport /from12-08-2024 1800 /to 13-08-2024 1800"));
     }
 
     /**
      * Tests adding a task with an empty or invalid command.
-     * Expects a failure with a return value of 0.
+     * Expects a failure message indicating invalid command.
      */
     @Test
     public void add_eventInvalidCommand_fail_1() {
-        assertEquals(0, Tasklist.add(" "));
+        assertEquals("System does not support such command. Only todo ..., deadline ..., event..., "
+                + "mark..., unmark..., delete..., find..., list and bye!", Tasklist.add(" "));
     }
 
     /**
      * Tests adding a task with an unrecognized command.
-     * Expects a failure with a return value of 0.
+     * Expects a failure message indicating unrecognized command.
      */
     @Test
     public void add_eventInvalidCommand_fail_2() {
-        assertEquals(0, Tasklist.add("hahaha"));
+        assertEquals("System does not support such command. Only todo ..., deadline ..., event...,"
+                + " mark..., unmark..., delete..., find..., list and bye!", Tasklist.add("hahaha"));
     }
-
 
     /**
      * Tests deleting a task with an invalid input of type String.
@@ -130,6 +138,4 @@ public class TasklistTest {
             assertEquals("For input string: \"hahaha\"", e.getMessage());
         }
     }
-
-
 }

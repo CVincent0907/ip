@@ -14,7 +14,6 @@ import task.Tasklist;
  * to storage and also create storage when it does not exist.
  */
 public class Storage {
-    //private static final String PATH = "src/main/data/TearIT.txt";
 
     /**
      * Writes each task's info to text file one step before exiting the system upon "bye" command.
@@ -50,7 +49,8 @@ public class Storage {
      * Create a file named TearIT.txt under a created directory named data when TearIT.txt
      * does not exist under current working directory.
      *
-     * @throws IOException Throws IOException if file or directory could not be created when TearIT.txt does not exist.
+     * @throws IOException Throws IOException if file or directory could not be created when
+     *      TearIT.txt does not exist.
      */
     public static void createFileIfNotExists() throws IOException {
         File file = new File(Storage.getPath());
@@ -76,7 +76,7 @@ public class Storage {
     }
 
     private static String getPath() {
-        return "data/TearIT.text";
+        return "data/TearIT.txt";
     }
 
 }
