@@ -15,6 +15,7 @@ import task.Tasklist;
  */
 public class Ui {
     private static int readFromFileCount = 0;
+
     /**
      * Processes a user input command related to task management and returns the corresponding output as a string.
      *
@@ -28,11 +29,17 @@ public class Ui {
      *     <li>"bye" - Exits the application and saves data</li>
      * </ul>
      *
-     * @param ending A string representing the final message to be displayed when the user exits the application.
-     * @param input A string representing the user's input command to be processed.
+     * @param args The first argument represents the final message displayed when exiting the application.
+     *             The second argument represents the user's input command to be processed.
      * @return A string containing the system's response, including success messages, error messages, or task listings.
      */
-    public static String echo(String ending, String input) {
+    public static String echo(String... args) {
+        if (args.length < 2) {
+            return "Error: Missing required arguments. Usage: echo(ending, input)";
+        }
+
+        String ending = args[0];
+        String input = args[1];
         StringBuilder output = new StringBuilder();
 
         if (input.trim().isEmpty()) {
@@ -45,7 +52,6 @@ public class Ui {
             int len = parts.length;
 
             switch (part.toLowerCase()) {
-
             case "list":
                 Ui.readFromFileCount++;
                 if (Ui.readFromFileCount == 1) {
@@ -70,8 +76,7 @@ public class Ui {
                     try {
                         output.append(Tasklist.markRemark(Integer.parseInt(parts[1]))).append("\n");
                     } catch (NumberFormatException e) {
-                        output.append(e.getMessage()).append("\n")
-                                .append("The argument should be an integer!\n");
+                        output.append(e.getMessage()).append("\n").append("The argument should be an integer!\n");
                     }
                 }
                 break;
@@ -83,8 +88,7 @@ public class Ui {
                     try {
                         output.append(Tasklist.unmarkRemark(Integer.parseInt(parts[1]))).append("\n");
                     } catch (NumberFormatException e) {
-                        output.append(e.getMessage()).append("\n")
-                                .append("The argument should be an integer!\n");
+                        output.append(e.getMessage()).append("\n").append("The argument should be an integer!\n");
                     }
                 }
                 break;
@@ -94,14 +98,12 @@ public class Ui {
                     Storage.writeToFile();
                 } catch (IOException e) {
                     output.append("Something went wrong: ").append(e.getMessage()).append("\n")
-                            .append("The data is not saved !\n");
+                                    .append("The data is not saved !\n");
                 }
                 output.append(ending).append("\n");
-                PauseTransition pause = new PauseTransition(Duration.seconds(1)); // 1 seconds delay
-                pause.setOnFinished(event -> {
-                    Platform.exit(); //  Close the JavaFX window after the delay
-                });
-                pause.play(); //  Start the delay
+                PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                pause.setOnFinished(event -> Platform.exit());
+                pause.play();
                 return output.toString();
 
             case "delete":
@@ -111,8 +113,7 @@ public class Ui {
                     try {
                         output.append(Tasklist.delete(Integer.parseInt(parts[1]))).append("\n");
                     } catch (NumberFormatException e) {
-                        output.append(e.getMessage()).append("\n")
-                                .append("The argument should be an integer!\n");
+                        output.append(e.getMessage()).append("\n").append("The argument should be an integer!\n");
                     }
                 }
                 break;
@@ -123,8 +124,8 @@ public class Ui {
                 } else {
                     ArrayList<Task> t = Tasklist.find(parts[1]);
                     if (!t.isEmpty()) {
-                        output.append("Here is/are the matching task(s) in your list:\n")
-                                .append(Tasklist.list(t)).append("\n");
+                        output.append("Here is/are the matching task(s) in your list:\n").append(Tasklist.list(t))
+                                .append("\n");
                     } else {
                         output.append("There is not any matching tasks in your list.\n");
                     }
