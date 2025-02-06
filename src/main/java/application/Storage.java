@@ -60,7 +60,7 @@ public class Storage {
 
         // Ensure the directory exists (create it if it doesn't)
         if (parentDirectory != null && !parentDirectory.exists()) {
-            boolean directoryCreated = parentDirectory.mkdirs();  // Creates the directory, if needed
+            boolean directoryCreated = parentDirectory.mkdirs(); // Creates the directory, if needed
             if (!directoryCreated) {
                 throw new IOException("Failed to create the directory at " + parentDirectory.getPath());
             }

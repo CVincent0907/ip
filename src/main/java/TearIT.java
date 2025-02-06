@@ -8,13 +8,13 @@ public class TearIT {
     private static final String opening = """
             Hello! I'm TearIT.
             What can I do for you?
-                        
+            
             -------------------------------------------------""";
 
 
     private static final String ending = """
-            Bye. Hope to see you again soon!
-                       
+            Bye. Hope to see you again soon! 
+            
             -------------------------------------------------""";
 
 
@@ -25,6 +25,9 @@ public class TearIT {
         Ui.echo(TearIT.ending);
     }
 
+    /**
+     *   Prints opening message to first interact with the user
+     */
     public static void openingMessage() {
         System.out.println("-------------------------------------------------");
         System.out.println(TearIT.opening);

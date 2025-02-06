@@ -95,8 +95,10 @@ public class Tasklist {
      *
      *                               <p>Console Output:</p>
      *                               <ul>
-     *                                   <li>If the task is successfully deleted, the method prints the removed task and the updated task count.</li>
-     *                                   <li>If the specified position is invalid, it prints an error message indicating the task does not exist.</li>
+     *                                   <li>If the task is successfully deleted, the method prints the removed
+     *                                   task and the updated task count.</li>
+     *                                   <li>If the specified position is invalid, it prints an error message
+     *                                   indicating the task does not exist.</li>
      *                               </ul>
      */
     public static void delete(Integer i) throws NumberFormatException {
