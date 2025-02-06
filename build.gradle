@@ -47,7 +47,7 @@ test {
 }
 
 application {
-    mainClass.set("gui.deLauncher") // entry -> do not need to state src/java just like package
+    mainClass.set("gui.Launcher") // entry -> do not need to state src/java just like package
 }
 
 shadowJar {
