@@ -3,8 +3,10 @@ package application;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
+import javafx.util.Duration;
 import task.Task;
 import task.Tasklist;
 
@@ -12,161 +14,132 @@ import task.Tasklist;
  * Ui class contains function to simulate the interactions between system and user in the application.
  */
 public class Ui {
-
+    private static int readFromFileCount = 0;
     /**
-     * Simulates a system to interact with user via command prompt.
+     * Processes a user input command related to task management and returns the corresponding output as a string.
      *
-     * @param ending Ending message received from <code>TearIT.java.</code>.
+     * <p>The method supports the following commands:
+     * <ul>
+     *     <li>"list" - Lists all tasks</li>
+     *     <li>"mark" - Marks a task as done by its index</li>
+     *     <li>"unmark" - Unmarks a task as undone by its index</li>
+     *     <li>"delete" - Deletes a task by its index</li>
+     *     <li>"find" - Finds tasks containing a specific keyword</li>
+     *     <li>"bye" - Exits the application and saves data</li>
+     * </ul>
+     *
+     * @param ending A string representing the final message to be displayed when the user exits the application.
+     * @param input A string representing the user's input command to be processed.
+     * @return A string containing the system's response, including success messages, error messages, or task listings.
      */
-    public static void echo(String ending) {
-        try {
-            Storage.readFromFile();
-        } catch (FileNotFoundException e) {
+    public static String echo(String ending, String input) {
+        StringBuilder output = new StringBuilder();
 
-            try {
-                Storage.createFileIfNotExists();
-            } catch (IOException e1) {
-                System.out.println("Error creating the file: " + e1.getMessage());
-                System.exit(1); // Exit if unable to create the file
-            }
+        if (input.trim().isEmpty()) {
+            output.append("System does not support such command. Only todo ..., ")
+                    .append("deadline ..., event..., mark..., unmark..., delete..., find ... list")
+                    .append(" and bye only !\n");
+        } else {
+            String[] parts = input.split(" ");
+            String part = parts[0];
+            int len = parts.length;
 
-        }
+            switch (part.toLowerCase()) {
 
-        Scanner sc = new Scanner(System.in);
-
-        // ErrorCode added in to handle the command which is NOT TODO, DEADLINE, EVENT
-        label:
-        while (true) {
-            String input = sc.nextLine();
-
-            // SHOULD ADD AN ERROR HANDLING FOR THIS (currently: list 1/ list 2 also OK...
-            // future extension maybe what if list 2: the first two are displayed) TODO
-            // This deals with empty command or mutliple spaces without command
-            if (input.trim().isEmpty()) {
-                System.out.println("    -------------------------------------------------");
-                System.out.println("    System does not support such command. Only todo ..., "
-                        + "deadline ..., event..., mark..., unmark..., delete..., find ... list"
-                        + " and bye only !");
-            } else {
-                String[] parts = input.split(" ");
-                String part = parts[0];
-                int len = parts.length;
-
-                switch (part.toLowerCase()) {
-
-                case "list":
-                    Tasklist.list();
-                    break;
-
-                case "mark":
-                    if (len == 1) {
-                        System.out.println("    There must be an integer after mark !");
-                    } else {
-                        try {
-                            Tasklist.markRemark(Integer.parseInt(parts[1]));
-                        } catch (NumberFormatException e) {
-                            System.out.println("    -------------------------------------------------");
-                            System.out.println("    " + e.getMessage());
-                            System.out.println("    The argument should be an integer!");
-                            System.out.println("    -------------------------------------------------");
-                        }
-                    }
-                    break;
-
-                case "unmark":
-                    if (len == 1) {
-                        System.out.println("    There must be an integer after unmark !");
-                    } else {
-                        try {
-                            Tasklist.unmarkRemark(Integer.parseInt(parts[1]));
-                        } catch (NumberFormatException e) {
-                            System.out.println("    -------------------------------------------------");
-                            System.out.println("    " + e.getMessage());
-                            System.out.println("    The argument should be an integer!");
-                            System.out.println("    -------------------------------------------------");
-                        }
-                    }
-                    break;
-
-                case "bye":
+            case "list":
+                Ui.readFromFileCount++;
+                if (Ui.readFromFileCount == 1) {
                     try {
-                        Storage.writeToFile();
-                    } catch (IOException e) {
-                        System.out.println("    Something went wrong: " + e.getMessage());
-                        System.out.println("    The data is not saved !");
-                    }
-                    break label;
-
-                case "delete":
-                    if (len == 1) {
-                        System.out.println("    There must be an integer after delete !");
-                    } else {
+                        Storage.readFromFile();
+                    } catch (FileNotFoundException e) {
                         try {
-                            Tasklist.delete(Integer.parseInt(parts[1]));
-                        } catch (NumberFormatException e) {
-                            System.out.println("    -------------------------------------------------");
-                            System.out.println("    " + e.getMessage());
-                            System.out.println("    The argument should be an integer!");
-                            System.out.println("    -------------------------------------------------");
+                            Storage.createFileIfNotExists();
+                        } catch (IOException e1) {
+                            output.append("Error creating the file: ").append(e1.getMessage()).append("\n");
+                            return output.toString();
                         }
                     }
-                    break;
-
-                case "find":
-                    if (len == 1) {
-                        System.out.println("    There must be an argument after find !");
-                    } else {
-                        ArrayList<Task> t = Tasklist.find(parts[1]);
-                        System.out.println("    -------------------------------------------------");
-                        if (!t.isEmpty()) {
-                            System.out.println("    Here is/are the matching task(s) in your list:");
-                            Tasklist.list(t);
-                        } else {
-                            System.out.println("    There is not any matching tasks in your list.");
-                        }
-                        System.out.println("    -------------------------------------------------");
-                    }
-                    break;
-
-                default:
-                    int errorCode = Tasklist.add(input);
-                    final int ERROR_CODE_UNKNOWN_COMMAND = 0;
-                    final int ERROR_CODE_TODO_COMMAND = -1;
-                    final int ERROR_CODE_DEADLINE_COMMAND = -2;
-                    final int ERROR_CODE_EVENT_COMMAND = -3;
-
-                    // should also specify input format to user also like from ... /to .... TODO
-                    switch (errorCode) {
-
-                    case ERROR_CODE_UNKNOWN_COMMAND:
-                        System.out.println("    System does not support such command. Only todo ..., "
-                                + "deadline ..., event..., mark..., unmark..., delete..., find... list"
-                                + " and bye only !");
-                        break;
-
-                    case ERROR_CODE_TODO_COMMAND:
-                        System.out.println("    There must be something after todo !");
-                        break;
-
-                    case ERROR_CODE_DEADLINE_COMMAND:
-                        System.out.println("    There must be something after deadline !");
-                        break;
-
-                    case ERROR_CODE_EVENT_COMMAND:
-                        System.out.println("    There must be something after event !");
-                        break;
-                        
-                    default:
-                    }
-                    break;
                 }
+                output.append(Tasklist.list()).append("\n");
+                break;
+
+            case "mark":
+                if (len == 1) {
+                    output.append("There must be an integer after mark !\n");
+                } else {
+                    try {
+                        output.append(Tasklist.markRemark(Integer.parseInt(parts[1]))).append("\n");
+                    } catch (NumberFormatException e) {
+                        output.append(e.getMessage()).append("\n")
+                                .append("The argument should be an integer!\n");
+                    }
+                }
+                break;
+
+            case "unmark":
+                if (len == 1) {
+                    output.append("There must be an integer after unmark !\n");
+                } else {
+                    try {
+                        output.append(Tasklist.unmarkRemark(Integer.parseInt(parts[1]))).append("\n");
+                    } catch (NumberFormatException e) {
+                        output.append(e.getMessage()).append("\n")
+                                .append("The argument should be an integer!\n");
+                    }
+                }
+                break;
+
+            case "bye":
+                try {
+                    Storage.writeToFile();
+                } catch (IOException e) {
+                    output.append("Something went wrong: ").append(e.getMessage()).append("\n")
+                            .append("The data is not saved !\n");
+                }
+                output.append(ending).append("\n");
+                PauseTransition pause = new PauseTransition(Duration.seconds(1)); // 1 seconds delay
+                pause.setOnFinished(event -> {
+                    Platform.exit(); //  Close the JavaFX window after the delay
+                });
+                pause.play(); //  Start the delay
+                return output.toString();
+
+            case "delete":
+                if (len == 1) {
+                    output.append("There must be an integer after delete !\n");
+                } else {
+                    try {
+                        output.append(Tasklist.delete(Integer.parseInt(parts[1]))).append("\n");
+                    } catch (NumberFormatException e) {
+                        output.append(e.getMessage()).append("\n")
+                                .append("The argument should be an integer!\n");
+                    }
+                }
+                break;
+
+            case "find":
+                if (len == 1) {
+                    output.append("There must be an argument after find !\n");
+                } else {
+                    ArrayList<Task> t = Tasklist.find(parts[1]);
+                    if (!t.isEmpty()) {
+                        output.append("Here is/are the matching task(s) in your list:\n")
+                                .append(Tasklist.list(t)).append("\n");
+                    } else {
+                        output.append("There is not any matching tasks in your list.\n");
+                    }
+                }
+                break;
+
+            default:
+                output.append(Tasklist.add(input)).append("\n");
+                break;
             }
         }
 
-
-        System.out.println("-------------------------------------------------");
-        System.out.println(ending);
-
+        return output.toString();
     }
 
 }
+
+

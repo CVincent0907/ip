@@ -55,12 +55,7 @@ public class Parser {
             return true;
 
         } else {
-            System.out.println("    Input format is incorrect.");
-            System.out.println("    todo input format :todo XX");
-            System.out.println("    deadline input format :deadline XX /by dd-mm-yyyy hhmm");
-            System.out.println("    deadline input format :deadline XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm");
             return false;
-
         }
 
     }
