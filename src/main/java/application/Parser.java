@@ -67,7 +67,6 @@ public class Parser {
      *      match the task string format.
      */
     public static boolean extractTaskFromFile(String task) {
-
         // Regex for each task type
         Pattern todoPattern = Pattern.compile(Todo.REGEX_2);
         Pattern deadlinePattern = Pattern.compile(Deadline.DATE_TIME_REGEX_2);
