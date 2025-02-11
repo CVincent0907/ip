@@ -66,7 +66,7 @@ public class TasklistTest {
         String expectedError = "    Input format is incorrect.\n"
                 + "    todo input format :todo XX\n"
                 + "    deadline input format :deadline XX /by dd-mm-yyyy hhmm\n"
-                + "    deadline input format :deadline XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm";
+                + "    event input format :event XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm";
         assertEquals(expectedError, Tasklist.add("deadline read book /by12-08-2024 1800"));
     }
 
@@ -100,7 +100,7 @@ public class TasklistTest {
         String expectedError = "    Input format is incorrect.\n"
                 + "    todo input format :todo XX\n"
                 + "    deadline input format :deadline XX /by dd-mm-yyyy hhmm\n"
-                + "    deadline input format :deadline XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm";
+                + "    event input format :event XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm";
         assertEquals(expectedError, Tasklist.add("event sport /from12-08-2024 1800 /to 13-08-2024 1800"));
     }
 
