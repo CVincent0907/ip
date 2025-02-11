@@ -37,44 +37,56 @@ public class Tasklist {
     public static String add(String input) {
         String[] parts = input.split(" ");
         int len = parts.length;
-        boolean flag;
 
+        return Tasklist.getAddTaskMessage(input, len);
+    }
+
+    private static String getAddTaskMessage(String input, int len) {
+        boolean taskCreationStatusFlag;
         if (input.toLowerCase().startsWith("todo")) {
             if (len <= 1) {
-                return "There must be something after \"todo\"!";
+                final String TODO_EMPTY_ARGUMENT_REMINDER = "There must be something after \"todo\"!";
+                return TODO_EMPTY_ARGUMENT_REMINDER;
             }
-            flag = Parser.extractAndCreateTask(input, Todo.REGEX_1, 1);
+
+            taskCreationStatusFlag = Parser.extractAndCreateTask(input, Todo.REGEX_1, 1);
         } else if (input.toLowerCase().startsWith("deadline")) {
             if (len <= 1) {
-                return "There must be something after \"deadline\"!";
+                final String DEADLINE_EMPTY_ARGUMENT_REMINDER = "There must be something after \"deadline\"!";
+                return DEADLINE_EMPTY_ARGUMENT_REMINDER;
             }
-            flag = Parser.extractAndCreateTask(input, Deadline.DATE_TIME_REGEX_1, 2);
+
+            taskCreationStatusFlag = Parser.extractAndCreateTask(input, Deadline.DATE_TIME_REGEX_1, 2);
         } else if (input.toLowerCase().startsWith("event")) {
             if (len <= 1) {
-                return "There must be something after \"event\"!";
+                final String EVENT_EMPTY_ARGUMENT_REMINDER  = "There must be something after \"event\"!";
+                return EVENT_EMPTY_ARGUMENT_REMINDER;
             }
-            flag = Parser.extractAndCreateTask(input, Event.DATE_TIME_REGEX_1, 3);
+
+            taskCreationStatusFlag = Parser.extractAndCreateTask(input, Event.DATE_TIME_REGEX_1, 3);
         } else {
-            return "System does not support such command. Only todo ..., deadline ..., event...,"
-                    + " mark..., unmark..., delete..., find..., list and bye!";
+            final String OUT_OF_SERVICE_REMINDER = "System does not support such command. Only todo ..., deadline ...," 
+                    + " event..., mark..., unmark..., delete..., find..., list and bye!";
+            return OUT_OF_SERVICE_REMINDER;
         }
 
-        if (flag) {
-            StringBuilder output = new StringBuilder();
-            output.append("Got it. I've added this task:\n");
-            output.append("   ").append(Tasklist.TASK_LIST.get(Task.getTaskCount() - 1)).append("\n");
-            output.append("Now you have ").append(Task.getTaskCount()).append(" tasks in the list.");
-            return output.toString();
-        } else {
-            StringBuilder errorMessage = new StringBuilder();
-            errorMessage.append("    Input format is incorrect.\n")
+        return Tasklist.getTaskCreationMessage(taskCreationStatusFlag);
+    }
+
+    private static String getTaskCreationMessage(boolean taskCreationStatusFlag) {
+        // Happy path refactoring
+        StringBuilder message = new StringBuilder();
+        if (!taskCreationStatusFlag) {
+            message.append("    Input format is incorrect.\n")
                     .append("    todo input format :todo XX\n")
                     .append("    deadline input format :deadline XX /by dd-mm-yyyy hhmm\n")
                     .append("    event input format :event XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm");
-
-            return errorMessage.toString();
-
+            return message.toString();
         }
+        message.append("Got it. I've added this task:\n");
+        message.append("   ").append(Tasklist.TASK_LIST.get(Task.getTaskCount() - 1)).append("\n");
+        message.append("Now you have ").append(Task.getTaskCount()).append(" tasks in the list.");
+        return message.toString();
     }
 
 
@@ -98,7 +110,7 @@ public class Tasklist {
      * It updates the task count and provides feedback about the operation.
      * </p>
      *
-     * @param i The 1-based position of the task to be deleted. It must be greater than 0 and less than
+     * @param taskNumber The 1-based position of the task to be deleted. It must be greater than 0 and less than
      *          or equal to the total number of tasks in the task list.
      * @return A formatted string containing feedback about the deletion and the updated task count.
      * @throws NumberFormatException If the input parameter is not a valid integer.
@@ -117,21 +129,23 @@ public class Tasklist {
      *      Now you have 3 tasks in the list.
      *      </pre>
      */
-    public static String delete(Integer i) throws NumberFormatException {
-        StringBuilder output = new StringBuilder();
+    public static String delete(Integer taskNumber) throws NumberFormatException {
 
-        if (i > 0 && i <= Task.getTaskCount()) {
-            String taskInfo = Tasklist.TASK_LIST.get(i - 1).toString();
-            Tasklist.TASK_LIST.remove(i - 1);
+        StringBuilder output = new StringBuilder();
+        boolean isValidTaskNumber = taskNumber > 0 && taskNumber <= Task.getTaskCount();
+        if (isValidTaskNumber) {
+            int taskIndex = taskNumber - 1;
+            String taskInfo = Tasklist.TASK_LIST.get(taskIndex).toString();
+            Tasklist.TASK_LIST.remove(taskIndex);
             Task.reduceTaskCount();
-            output.append("Hey bro! I have removed task ").append(i).append(".\n");
+
+            output.append("Hey bro! I have removed task ").append(taskNumber).append(".\n");
             output.append(taskInfo).append("\n");
         } else {
-            output.append("Hey bro! You do not have task ").append(i).append(".\n");
+            output.append("Hey bro! You do not have task ").append(taskNumber).append(".\n");
         }
 
         output.append("Now you have ").append(Task.getTaskCount()).append(" tasks in the list.\n");
-
         return output.toString();
     }
 
@@ -144,16 +158,17 @@ public class Tasklist {
      * @return A formatted string representing the task list.
      */
     public static String list() {
-        StringBuilder taskListBuilder = new StringBuilder();
 
+        StringBuilder taskListBuilder = new StringBuilder();
         taskListBuilder.append("Here are the tasks in your list:\n");
+
         for (int i = 0; i < Task.getTaskCount(); i++) {
             taskListBuilder.append((i + 1)).append(". ")
                     .append(Tasklist.TASK_LIST.get(i))
                     .append("\n");
         }
 
-        return taskListBuilder.toString().trim();
+        return taskListBuilder.toString();
     }
 
     /**
@@ -164,9 +179,9 @@ public class Tasklist {
      * error message and still includes the current task list.
      * </p>
      *
-     * @param i    The 1-based position of the task to mark or unmark. It must be greater than 0
+     * @param taskNumber    The 1-based position of the task to isTaskMarked or unmark. It must be greater than 0
      *             and less than or equal to the total number of tasks in the task list.
-     * @param mark {@code true} to mark the task as completed, or {@code false} to unmark it.
+     * @param isTaskMarked {@code true} to isTaskMarked the task as completed, or {@code false} to unmark it.
      * @param msg  A custom message to display after marking/unmarking the task. This can include
      *             congratulatory or humorous remarks based on the task's status.
      * @return A formatted string containing the message and the updated list of tasks.
@@ -188,18 +203,20 @@ public class Tasklist {
      *      3. [D] Submit project (by: 20-10-2024 1800)
      *      </pre>
      */
-    public static String list(Integer i, boolean mark, String msg) {
+    public static String list(Integer taskNumber, boolean isTaskMarked, String msg) {
         StringBuilder output = new StringBuilder();
 
-        if (i > 0 && i <= Task.getTaskCount()) {
-            if (mark) {
-                Tasklist.TASK_LIST.get(i - 1).mark();
+        boolean isValidTaskNumber = taskNumber > 0 && taskNumber <= Task.getTaskCount();
+        if (isValidTaskNumber) {
+            int taskIndex = taskNumber - 1;
+            if (isTaskMarked) {
+                Tasklist.mark(taskIndex);
             } else {
-                Tasklist.TASK_LIST.get(i - 1).unmark();
+                Tasklist.unmark(taskIndex);
             }
-            output.append(msg).append(i).append(" .\n");
+            output.append(msg).append(taskNumber).append(" .\n");
         } else {
-            output.append("You do not have task ").append(i).append("!\n");
+            output.append("You do not have task ").append(taskNumber).append("!\n");
         }
 
         for (int j = 0; j < Task.getTaskCount(); j++) {
@@ -214,17 +231,18 @@ public class Tasklist {
      * It formats the list by numbering each task and appending the string
      * representation of each task.
      *
-     * @param lst The list of tasks to be listed. This must be a non-null
+     * @param taskList The list of tasks to be listed. This must be a non-null
      *            ArrayList of Task objects.
      * @return A string that contains all tasks in the list, formatted with their
      *         respective indices.
      */
-    public static String list(ArrayList<Task> lst) {
+    public static String list(ArrayList<Task> taskList) {
         StringBuilder output = new StringBuilder();
-        int i = 1;
-        for (Task t : lst) {
-            output.append("    ").append(i).append(". ").append(t.toString()).append("\n");
-            i++;
+
+        int taskIndex = 1;
+        for (Task t : taskList) {
+            output.append("    ").append(taskIndex).append(". ").append(t.toString()).append("\n");
+            taskIndex++;
         }
         return output.toString();
     }
@@ -233,35 +251,35 @@ public class Tasklist {
     /**
      * Marks the specified task as done and displays it along with a congratulatory remark.
      *
-     * @param i The 1-based position of the task to mark as done. It must be greater than 0 and less
+     * @param taskIndex The 1-based position of the task to mark as done. It must be greater than 0 and less
      *          than or equal to the total number of tasks in the task list.
      *
      *          <p>Console Output:</p>
      *          <ul>
      *              <li>Marks the specified task as done.</li>
-     *              <li>Prints a congratulatory message, "Well Done! You finished task {i}".</li>
+     *              <li>Prints a congratulatory message, "Well Done! You finished task {taskIndex}".</li>
      *              <li>Displays the updated list of tasks.</li>
      *          </ul>
      */
-    public static String markRemark(Integer i) {
-        return Tasklist.list(i, true, "    Well Done! You finished task ");
+    public static String markRemark(Integer taskIndex) {
+        return Tasklist.list(taskIndex, true, "    Well Done! You finished task ");
     }
 
     /**
      * Unmarks the specified task as done and displays it along with a message of disappointment.
      *
-     * @param i The 1-based position of the task to unmark. It must be greater than 0 and less
+     * @param taskIndex The 1-based position of the task to unmark. It must be greater than 0 and less
      *          than or equal to the total number of tasks in the task list.
      *
      *          <p>Console Output:</p>
      *          <ul>
      *              <li>Unmarks the specified task as not done.</li>
-     *              <li>Prints a message, "Oh No! You haven't completed task {i}".</li>
+     *              <li>Prints a message, "Oh No! You haven't completed task {taskIndex}".</li>
      *              <li>Displays the updated list of tasks.</li>
      *          </ul>
      */
-    public static String unmarkRemark(Integer i) {
-        return Tasklist.list(i, false, "    Oh No! You haven't completed task ");
+    public static String unmarkRemark(Integer taskIndex) {
+        return Tasklist.list(taskIndex, false, "    Oh No! You haven't completed task ");
     }
 
 
@@ -270,11 +288,11 @@ public class Tasklist {
      * <p>
      * This method is used when tasks are being loaded from a file.
      *
-     * @param i The 0-based index of the task to mark as done. It must be a valid index within
+     * @param taskIndex The 0-based index of the task to mark as done. It must be a valid index within
      *          the task list.
      */
-    public static void mark(int i) {
-        Tasklist.TASK_LIST.get(i).mark();
+    public static void mark(int taskIndex) {
+        Tasklist.TASK_LIST.get(taskIndex).mark();
     }
 
     /**
@@ -282,11 +300,11 @@ public class Tasklist {
      * <p>
      * This method is used when tasks are being loaded from a file.
      *
-     * @param i The 0-based index of the task to unmark as not done. It must be a valid index
+     * @param taskIndex The 0-based index of the task to unmark as not done. It must be a valid index
      *          within the task list.
      */
-    public static void unmark(int i) {
-        Tasklist.TASK_LIST.get(i).unmark();
+    public static void unmark(int taskIndex) {
+        Tasklist.TASK_LIST.get(taskIndex).unmark();
     }
 
     /**
@@ -312,12 +330,12 @@ public class Tasklist {
     /**
      * Retrieves the string representation of the specified task.
      *
-     * @param i The 0-based index of the task to retrieve. It must be a valid index within the
+     * @param taskIndex The 0-based index of the task to retrieve. It must be a valid index within the
      *          task list.
      * @return A string representation of the specified task.
      */
-    public static String getTaskString(int i) {
-        return Tasklist.TASK_LIST.get(i).toString();
+    public static String getTaskString(int taskIndex) {
+        return Tasklist.TASK_LIST.get(taskIndex).toString();
     }
 
 }
