@@ -42,6 +42,20 @@ public class Ui {
         String input = args[1];
         StringBuilder output = new StringBuilder();
 
+        Ui.readFromFileCount++;
+        if (Ui.readFromFileCount == 1) {
+            try {
+                Storage.readFromFile();
+            } catch (FileNotFoundException e) {
+                try {
+                    Storage.createFileIfNotExists();
+                } catch (IOException e1) {
+                    output.append("Error creating the file: ").append(e1.getMessage()).append("\n");
+                    return output.toString();
+                }
+            }
+        }
+
         if (input.trim().isEmpty()) {
             output.append("System does not support such command. Only todo ..., ")
                     .append("deadline ..., event..., mark..., unmark..., delete..., find ... list")
@@ -53,19 +67,6 @@ public class Ui {
 
             switch (part.toLowerCase()) {
             case "list":
-                Ui.readFromFileCount++;
-                if (Ui.readFromFileCount == 1) {
-                    try {
-                        Storage.readFromFile();
-                    } catch (FileNotFoundException e) {
-                        try {
-                            Storage.createFileIfNotExists();
-                        } catch (IOException e1) {
-                            output.append("Error creating the file: ").append(e1.getMessage()).append("\n");
-                            return output.toString();
-                        }
-                    }
-                }
                 output.append(Tasklist.list()).append("\n");
                 break;
 
