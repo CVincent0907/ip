@@ -77,39 +77,41 @@ public class Parser {
         Matcher todoMatcher = todoPattern.matcher(task);
         Matcher deadlineMatcher = deadlinePattern.matcher(task);
         Matcher eventMatcher = eventPattern.matcher(task);
+        boolean expression = todoMatcher.matches() || deadlineMatcher.matches() || eventMatcher.matches();
 
-        if (todoMatcher.matches() || deadlineMatcher.matches() || eventMatcher.matches()) {
-            if (todoMatcher.matches()) {
-                boolean isDone = todoMatcher.group(1).equals("X");
-                Tasklist.add(new Todo(todoMatcher.group(2)));
-                if (isDone) {
-                    Tasklist.mark(Task.getTaskCount());
-                }
-            } else if (deadlineMatcher.matches()) {
-                boolean isDone = deadlineMatcher.group(1).equals("X");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a",
-                        Locale.ENGLISH);
-                Tasklist.add(new Deadline(deadlineMatcher.group(2),
-                        LocalDateTime.parse(deadlineMatcher.group(3), formatter)));
-                if (isDone) {
-                    Tasklist.mark(Task.getTaskCount());
-                }
-            } else if (eventMatcher.matches()) {
-                boolean isDone = eventMatcher.group(1).equals("X");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy hh:mm a",
-                        Locale.ENGLISH);
-                Tasklist.add(new Event(eventMatcher.group(2),
-                        LocalDateTime.parse(eventMatcher.group(3), formatter),
-                        LocalDateTime.parse(eventMatcher.group(4), formatter)));
-                if (isDone) {
-                    Tasklist.mark(Task.getTaskCount());
-                }
-            }
-            Task.addTaskCount();
-            return true;
-        } else {
+        if (!expression) {
             return false;
         }
-    }
-
+        // The happy path
+        if (todoMatcher.matches()) {
+            boolean isDone = todoMatcher.group(1).equals("X");
+            Tasklist.add(new Todo(todoMatcher.group(2)));
+            if (isDone) {
+                Tasklist.mark(Task.getTaskCount());
+            }
+        } else if (deadlineMatcher.matches()) {
+            boolean isDone = deadlineMatcher.group(1).equals("X");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a",
+                    Locale.ENGLISH);
+            Tasklist.add(new Deadline(deadlineMatcher.group(2),
+                    LocalDateTime.parse(deadlineMatcher.group(3), formatter)));
+            if (isDone) {
+                Tasklist.mark(Task.getTaskCount());
+            }
+        } else if (eventMatcher.matches()) {
+            boolean isDone = eventMatcher.group(1).equals("X");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy hh:mm a",
+                    Locale.ENGLISH);
+            Tasklist.add(new Event(eventMatcher.group(2),
+                    LocalDateTime.parse(eventMatcher.group(3), formatter),
+                    LocalDateTime.parse(eventMatcher.group(4), formatter)));
+            if (isDone) {
+                Tasklist.mark(Task.getTaskCount());
+            }
+        }
+        Task.addTaskCount();
+        return true;
+        }
 }
+
+

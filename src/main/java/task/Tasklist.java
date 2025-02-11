@@ -70,7 +70,7 @@ public class Tasklist {
             errorMessage.append("    Input format is incorrect.\n")
                     .append("    todo input format :todo XX\n")
                     .append("    deadline input format :deadline XX /by dd-mm-yyyy hhmm\n")
-                    .append("    deadline input format :deadline XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm");
+                    .append("    event input format :event XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm");
 
             return errorMessage.toString();
 
