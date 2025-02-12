@@ -111,7 +111,7 @@ public class TasklistTest {
     @Test
     public void add_eventInvalidCommand_fail_1() {
         assertEquals("System does not support such command. Only todo ..., deadline ..., event..., "
-                + "mark..., unmark..., delete..., find..., list and bye!", Tasklist.add(" "));
+                + "mark..., unmark..., delete..., find..., list..., lookup... and bye!", Tasklist.add(" "));
     }
 
     /**
@@ -121,7 +121,7 @@ public class TasklistTest {
     @Test
     public void add_eventInvalidCommand_fail_2() {
         assertEquals("System does not support such command. Only todo ..., deadline ..., event...,"
-                + " mark..., unmark..., delete..., find..., list and bye!", Tasklist.add("hahaha"));
+                + " mark..., unmark..., delete..., find..., list..., lookup... and bye!", Tasklist.add("hahaha"));
     }
 
     /**
