@@ -2,12 +2,7 @@ package application;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import javafx.animation.PauseTransition;
-import javafx.application.Platform;
-import javafx.util.Duration;
-import task.Task;
 import task.Tasklist;
 
 /**
@@ -17,31 +12,122 @@ public class Ui {
     private static int readFromFileCount = 0;
 
     /**
-     * Processes a user input command related to task management and returns the corresponding output as a string.
+     * Processes and handles user input for echo command. It validates the input, handles error cases,
+     *      and generates an appropriate system response. This method interacts with the storage system
+     *              to fetch necessary data and constructs the response based on user input.
      *
-     * <p>The method supports the following commands:
-     * <ul>
-     *     <li>"list" - Lists all tasks</li>
-     *     <li>"mark" - Marks a task as done by its index</li>
-     *     <li>"unmark" - Unmarks a task as undone by its index</li>
-     *     <li>"delete" - Deletes a task by its index</li>
-     *     <li>"find" - Finds tasks containing a specific keyword</li>
-     *     <li>"bye" - Exits the application and saves data</li>
-     * </ul>
+     * <p>If the input is invalid, a specific error message is returned. If the input is valid,
+     * the system will return the appropriate response based on the processed input.</p>
      *
-     * @param args The first argument represents the final message displayed when exiting the application.
-     *             The second argument represents the user's input command to be processed.
-     * @return A string containing the system's response, including success messages, error messages, or task listings.
+     * @param args A varargs parameter that allows multiple arguments to be passed. The second argument
+     *             (args[1]) represents the actual user input.
+     *
+     * @return A string containing the system response, which could either be an error message or
+     *         a valid system response based on the input. If the user input is empty or invalid,
+     *         an error message is returned.
      */
     public static String echo(String... args) {
-        if (args.length < 2) {
-            return "Error: Missing required arguments. Usage: echo(ending, input)";
+
+        StringBuilder systemResponse = new StringBuilder();
+
+        String readFromStorageErrorMsg = readFromStorage(systemResponse);
+        if (readFromStorageErrorMsg != null) {
+            return readFromStorageErrorMsg;
         }
 
-        String ending = args[0];
-        String input = args[1];
-        StringBuilder output = new StringBuilder();
+        String userInput = args[1];
+        if (userInput.trim().isEmpty()) {
+            systemResponse.append("System does not support such command. Only todo ..., ")
+                    .append("deadline ..., event..., mark..., unmark..., delete..., find ... list")
+                    .append(" and bye only !\n");
+            return systemResponse.toString();
+        }
 
+        String[] userInputFragments = userInput.split(" ");
+        int userInputLen = userInputFragments.length;
+        String errorMsg = handleUserInput(args, userInputFragments, systemResponse, userInputLen, userInput);
+        if (errorMsg != null) {
+            return errorMsg;
+        }
+        return systemResponse.toString();
+    }
+
+
+    /**
+     * Handles the processing of user input and generates the appropriate system response
+     *      based on the command specified in the user input. This method supports various commands
+     *              such as "list", "mark", "unmark", "bye", "delete", and "find", and delegates the
+     *                      handling of specific commands to corresponding helper methods.
+     * <p>
+     * If the command is not recognized, it defaults to adding a task to the task list.
+     * </p>
+     *
+     * @param args An array of arguments passed to the method. The first element (args[0])
+     *             is used for handling the "bye" command.
+     * @param userInputFragments An array of fragments obtained by splitting the user input.
+     *                           The first element of this array is used to identify the command.
+     * @param systemResponse A StringBuilder object where the system response will be appended.
+     *                       It is updated throughout the method depending on the command processed.
+     * @param userInputLen The length of the user input, used for validating commands that require arguments.
+     * @param userInput The complete user input as a single string, used for processing the command.
+     *
+     * @return A string containing the error message (if any) for unsupported commands,
+     *         or null if the command is processed successfully.
+     */
+    private static String handleUserInput(String[] args, String[] userInputFragments,
+                                          StringBuilder systemResponse, int userInputLen, String userInput) {
+        switch (userInputFragments[0].toLowerCase()) {
+        case "list":
+            systemResponse.append(Tasklist.list()).append("\n");
+            break;
+
+        case "mark":
+            Command.handleMarkCommand(userInputLen, systemResponse, userInputFragments);
+            break;
+
+        case "unmark":
+            Command.handleUnmarkCommand(userInputLen, systemResponse, userInputFragments);
+            break;
+
+        case "bye":
+            String systemByeMsg = args[0];
+            return Command.handleByeRelatedCommand(systemResponse, systemByeMsg);
+
+        case "delete":
+            Command.handleDeleteCommand(userInputLen, systemResponse, userInputFragments);
+            break;
+
+        case "find":
+            Command.handleFindCommand(userInputLen, systemResponse, userInputFragments);
+            break;
+
+        default:
+            systemResponse.append(Tasklist.add(userInput)).append("\n");
+            break;
+
+        }
+        return null;
+    }
+
+
+    /**
+     * Attempts to read data from storage and handle any errors that might occur during
+     *      the reading process. If the data cannot be read because the file does not exist,
+     *              it attempts to create the file and then proceed with reading. This method is only
+     *                      executed the first time the program runs, as it checks the count of file reads.
+     *
+     * <p>If an error occurs during file creation, the error message is appended to the
+     *      system response. If the reading or file creation process is successful, the method
+     *              proceeds without returning any errors.</p>
+     *
+     * @param systemResponse A StringBuilder where error or success messages are appended.
+     *                       It will contain an error message if file creation fails,
+     *                       or null if the operation succeeds.
+     *
+     * @return A string containing an error message if any issues occur during file reading
+     *         or creation, or null if there are no errors.
+     */
+    private static String readFromStorage(StringBuilder systemResponse) {
         Ui.readFromFileCount++;
         if (Ui.readFromFileCount == 1) {
             try {
@@ -50,96 +136,12 @@ public class Ui {
                 try {
                     Storage.createFileIfNotExists();
                 } catch (IOException e1) {
-                    output.append("Error creating the file: ").append(e1.getMessage()).append("\n");
-                    return output.toString();
+                    systemResponse.append("Error creating the file: ").append(e1.getMessage()).append("\n");
+                    return systemResponse.toString();
                 }
             }
         }
-
-        if (input.trim().isEmpty()) {
-            output.append("System does not support such command. Only todo ..., ")
-                    .append("deadline ..., event..., mark..., unmark..., delete..., find ... list")
-                    .append(" and bye only !\n");
-        } else {
-            String[] parts = input.split(" ");
-            String part = parts[0];
-            int len = parts.length;
-
-            switch (part.toLowerCase()) {
-            case "list":
-                output.append(Tasklist.list()).append("\n");
-                break;
-
-            case "mark":
-                if (len == 1) {
-                    output.append("There must be an integer after mark !\n");
-                } else {
-                    try {
-                        output.append(Tasklist.markRemark(Integer.parseInt(parts[1]))).append("\n");
-                    } catch (NumberFormatException e) {
-                        output.append(e.getMessage()).append("\n").append("The argument should be an integer!\n");
-                    }
-                }
-                break;
-
-            case "unmark":
-                if (len == 1) {
-                    output.append("There must be an integer after unmark !\n");
-                } else {
-                    try {
-                        output.append(Tasklist.unmarkRemark(Integer.parseInt(parts[1]))).append("\n");
-                    } catch (NumberFormatException e) {
-                        output.append(e.getMessage()).append("\n").append("The argument should be an integer!\n");
-                    }
-                }
-                break;
-
-            case "bye":
-                try {
-                    Storage.writeToFile();
-                } catch (IOException e) {
-                    output.append("Something went wrong: ").append(e.getMessage()).append("\n")
-                                    .append("The data is not saved !\n");
-                }
-                output.append(ending).append("\n");
-                PauseTransition pause = new PauseTransition(Duration.seconds(1));
-                pause.setOnFinished(event -> Platform.exit());
-                pause.play();
-                return output.toString();
-
-            case "delete":
-                if (len == 1) {
-                    output.append("There must be an integer after delete !\n");
-                } else {
-                    try {
-                        output.append(Tasklist.delete(Integer.parseInt(parts[1]))).append("\n");
-                    } catch (NumberFormatException e) {
-                        output.append(e.getMessage()).append("\n").append("The argument should be an integer!\n");
-                    }
-                }
-                break;
-
-            case "find":
-                if (len == 1) {
-                    output.append("There must be an argument after find !\n");
-                } else {
-                    ArrayList<Task> t = Tasklist.find(parts[1]);
-                    if (!t.isEmpty()) {
-                        output.append("Here is/are the matching task(s) in your list:\n").append(Tasklist.list(t))
-                                .append("\n");
-                    } else {
-                        output.append("There is not any matching tasks in your list.\n");
-                    }
-                }
-                break;
-
-            default:
-                output.append(Tasklist.add(input)).append("\n");
-                break;
-            }
-        }
-
-        return output.toString();
+        return null;
     }
 
 }
