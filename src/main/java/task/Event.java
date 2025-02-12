@@ -16,21 +16,32 @@ public class Event extends Task {
     public static final String DATE_TIME_REGEX_2 = "\\[E\\]\\[(X| )\\] (.*?) \\"
             + "(from: (\\w+ \\d{1,2} \\d{4} \\d{1,2}:\\d{2} [APMapm]{2}) "
             + "to: (\\w+ \\d{1,2} \\d{4} \\d{1,2}:\\d{2} [APMapm]{2})\\)";
-    private final LocalDateTime fromTime;
-    private final LocalDateTime toTime;
+    private final LocalDateTime fromDate;
+    private final LocalDateTime toDate;
 
-    public Event(String description, LocalDateTime fromTime, LocalDateTime toTime) {
+    public Event(String description, LocalDateTime fromDate, LocalDateTime toDate) {
         super(description);
-        this.fromTime = fromTime;
-        this.toTime = toTime;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
 
     }
 
+    /**
+     * Checks if either the task's from date or to date matches the provided date in the "dd-MM-yyyy" format.
+     *
+     * @param date The date to compare against the task's from and to dates.
+     * @return {@code true} if either the from date or to date matches the provided date; {@code false} otherwise.
+     */
+    public boolean isFromDateOrByDateMatch(String date) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return this.fromDate.format(dateFormatter).equals(date)
+                || this.toDate.format(dateFormatter).equals(date);
+    }
 
     @Override
     public String toString() {
         return String.format("[E]%s (from: %s to: %s)", super.toString(),
-                this.fromTime.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")),
-                this.toTime.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")));
+                this.fromDate.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")),
+                this.toDate.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")));
     }
 }

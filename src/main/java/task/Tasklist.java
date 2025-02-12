@@ -1,5 +1,6 @@
 package task;
 
+
 import java.util.ArrayList;
 
 import application.Parser;
@@ -79,7 +80,7 @@ public class Tasklist {
             taskCreationStatusFlag = Parser.extractAndCreateTask(input, Event.DATE_TIME_REGEX_1, 3);
         } else {
             final String OUT_OF_SERVICE_REMINDER = "System does not support such command. Only todo ..., deadline ...," 
-                    + " event..., mark..., unmark..., delete..., find..., list and bye!";
+                    + " event..., mark..., unmark..., delete..., find..., list..., lookup... and bye!";
             return OUT_OF_SERVICE_REMINDER;
         }
 
@@ -276,14 +277,14 @@ public class Tasklist {
      * This function iterates over all tasks in the task list and adds the tasks
      *      whose description contains the provided keyword (case-insensitive) to a new list.
      *
-     * @param input the keyword to search for in task descriptions
+     * @param userInput the keyword to search for in task descriptions
      * @return an ArrayList containing the tasks that match the keyword
      */
-    public static ArrayList<Task> find(String input) {
+    public static ArrayList<Task> find(String userInput) {
         ArrayList<Task> lst = new ArrayList<>();
 
         for (Task t : TASK_LIST) {
-            if (t.getLowerCaseDescription().contains(input.toLowerCase())) {
+            if (t.getLowerCaseDescription().contains(userInput.toLowerCase())) {
                 lst.add(t);
             }
         }
@@ -301,4 +302,21 @@ public class Tasklist {
         return Tasklist.TASK_LIST.get(taskIndex).toString();
     }
 
+    public static ArrayList<Task> scheduleLookUp(String dateToCheck) {
+        // can put an assertion here to check the form of date is in dd-mm-yyyy
+        ArrayList<Task> lst = new ArrayList<>();
+        for (Task t: Tasklist.TASK_LIST) {
+            if (t instanceof Deadline) {
+                if (((Deadline) t).isDeadlineMatch(dateToCheck)) {
+                    lst.add(t);
+                }
+            }
+            if (t instanceof Event) {
+                if (((Event) t).isFromDateOrByDateMatch(dateToCheck)) {
+                    lst.add(t);
+                }
+            }
+        }
+        return  lst;
+    }
 }

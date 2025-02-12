@@ -20,6 +20,17 @@ public class Deadline extends Task {
         this.deadline = deadline;
     }
 
+    /**
+     * Checks if the task's deadline matches the provided date in the "dd-MM-yyyy" format.
+     *
+     * @param date The date to compare against the task's deadline.
+     * @return {@code true} if the task's deadline matches the provided date; {@code false} otherwise.
+     */
+    public boolean isDeadlineMatch(String date) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return this.deadline.format(dateFormatter).equals(date);
+    }
+
     @Override
     public String toString() {
         return String.format("[D]%s (by: %s)", super.toString(),

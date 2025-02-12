@@ -39,7 +39,7 @@ public class Ui {
         if (userInput.trim().isEmpty()) {
             systemResponse.append("System does not support such command. Only todo ..., ")
                     .append("deadline ..., event..., mark..., unmark..., delete..., find ... list")
-                    .append(" and bye only !\n");
+                    .append("... lookup and bye only !\n");
             return systemResponse.toString();
         }
 
@@ -56,7 +56,7 @@ public class Ui {
     /**
      * Handles the processing of user input and generates the appropriate system response
      *      based on the command specified in the user input. This method supports various commands
-     *              such as "list", "mark", "unmark", "bye", "delete", and "find", and delegates the
+     *              such as "list", "mark", "unmark", "bye", "delete", "find", "lookup" and delegates the
      *                      handling of specific commands to corresponding helper methods.
      * <p>
      * If the command is not recognized, it defaults to adding a task to the task list.
@@ -78,7 +78,7 @@ public class Ui {
                                           StringBuilder systemResponse, int userInputLen, String userInput) {
         switch (userInputFragments[0].toLowerCase()) {
         case "list":
-            systemResponse.append(Tasklist.list()).append("\n");
+            Command.handleListCommand(userInputLen,systemResponse);
             break;
 
         case "mark":
@@ -91,7 +91,7 @@ public class Ui {
 
         case "bye":
             String systemByeMsg = args[0];
-            return Command.handleByeRelatedCommand(systemResponse, systemByeMsg);
+            return Command.handleByeCommand(userInputLen, systemResponse, systemByeMsg);
 
         case "delete":
             Command.handleDeleteCommand(userInputLen, systemResponse, userInputFragments);
@@ -99,6 +99,10 @@ public class Ui {
 
         case "find":
             Command.handleFindCommand(userInputLen, systemResponse, userInputFragments);
+            break;
+
+        case "lookup":
+            Command.handleLookUpCommand(userInputLen, systemResponse, userInputFragments);
             break;
 
         default:
