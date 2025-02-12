@@ -32,6 +32,19 @@ public class Tasklist {
     }
 
     /**
+     * Adds a task object directly to the task list.
+     * <p>
+     * This method appends the provided {@link Task} object (e.g., {@link Todo}, {@link Deadline}, or {@link Event})
+     *      to the task list without any additional processing or validation.
+     *
+     * @param task The {@link Task} object to be added to the task list. It should be a valid task instance such as
+     *             {@link Todo}, {@link Deadline}, or {@link Event}.
+     */
+    public static void add(Task task) {
+        Tasklist.TASK_LIST.add(task);
+    }
+
+    /**
      * Generates a message for adding a new task based on the user input.
      * <p>This method processes the input to determine the type of task (todo, deadline, or event)
      *      and calls the appropriate parsing method. It then returns a message indicating
@@ -59,7 +72,7 @@ public class Tasklist {
             taskCreationStatusFlag = Parser.extractAndCreateTask(input, Deadline.DATE_TIME_REGEX_1, 2);
         } else if (input.toLowerCase().startsWith("event")) {
             if (len <= 1) {
-                final String EVENT_EMPTY_ARGUMENT_REMINDER  = "There must be something after \"event\"!";
+                final String EVENT_EMPTY_ARGUMENT_REMINDER = "There must be something after \"event\"!";
                 return EVENT_EMPTY_ARGUMENT_REMINDER;
             }
 
@@ -98,20 +111,6 @@ public class Tasklist {
         message.append("   ").append(Tasklist.TASK_LIST.get(Task.getTaskCount() - 1)).append("\n");
         message.append("Now you have ").append(Task.getTaskCount()).append(" tasks in the list.");
         return message.toString();
-    }
-
-
-    /**
-     * Adds a task object directly to the task list.
-     * <p>
-     * This method appends the provided {@link Task} object (e.g., {@link Todo}, {@link Deadline}, or {@link Event})
-     *      to the task list without any additional processing or validation.
-     *
-     * @param task The {@link Task} object to be added to the task list. It should be a valid task instance such as
-     *             {@link Todo}, {@link Deadline}, or {@link Event}.
-     */
-    public static void add(Task task) {
-        Tasklist.TASK_LIST.add(task);
     }
 
     /**

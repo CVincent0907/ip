@@ -59,7 +59,8 @@ public class Command {
      * @param userInputFragments An array of strings that represents the fragments of the
      *                           user's input, where the second fragment contains the task number to delete.
      */
-    public static void handleDeleteCommand(int userInputLen, StringBuilder systemResponse, String[] userInputFragments) {
+    public static void handleDeleteCommand(int userInputLen,
+                                           StringBuilder systemResponse, String[] userInputFragments) {
         if (userInputLen == 1) {
             systemResponse.append("There must be an integer after delete !\n");
         } else {
@@ -122,7 +123,8 @@ public class Command {
      * @param userInputFragments The user input broken into fragments (commands and arguments),
      *                           used to identify the specific task number to unmark.
      */
-    public static void handleUnmarkCommand(int userInputLen, StringBuilder systemResponse, String[] userInputFragments) {
+    public static void handleUnmarkCommand(int userInputLen, StringBuilder systemResponse,
+                                           String[] userInputFragments) {
         if (userInputLen == 1) {
             systemResponse.append("There must be an integer after unmark !\n");
         } else {

@@ -99,12 +99,13 @@ public class Parser {
         Parser.identifyCatAndExtractTask(todoMatcher, deadlineMatcher, eventMatcher, datePattern);
         Task.addTaskCount();
         return true;
-        }
+    }
 
     /**
      * Identifies and extracts task details from the provided matchers (Todo, Deadline, or Event).
      * <p>This method processes the input matchers to extract task information and creates the appropriate
-     *      task object (Todo, Deadline, or Event), marking it as done if necessary. The task is then added to the task list.</p>
+     *      task object (Todo, Deadline, or Event), marking it as done if necessary. The task is then added
+     *              to the task list.</p>
      *
      * @param todoMatcher The matcher containing the Todo task details.
      * @param deadlineMatcher The matcher containing the Deadline task details.
