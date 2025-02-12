@@ -33,6 +33,7 @@ public class Ui {
         String readFromStorageErrorMsg = readFromStorage(systemResponse);
         if (readFromStorageErrorMsg != null) {
             return readFromStorageErrorMsg;
+            
         }
 
         String userInput = args[1];
