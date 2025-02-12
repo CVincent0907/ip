@@ -9,6 +9,8 @@ public class TearIT {
     private static final String ending = "Bye. Hope to see you again soon! ";
 
     public String getResponse(String input) {
+        // Assume Ui.echo() will got give null response despite any input by users
+        assert Ui.echo(TearIT.ending, input) != "": "Wrong assumption ! The return value is not empty strings";
         return Ui.echo(TearIT.ending, input);
     }
 
