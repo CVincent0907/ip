@@ -47,10 +47,10 @@ public class Storage {
 
     /**
      * Create a file named TearIT.txt under a created directory named data when TearIT.txt
-     * does not exist under current working directory.
+     *      does not exist under current working directory.
      *
      * @throws IOException Throws IOException if file or directory could not be created when
-     *      TearIT.txt does not exist.
+     *                     TearIT.txt does not exist.
      */
     public static void createFileIfNotExists() throws IOException {
         File file = new File(Storage.getPath());
