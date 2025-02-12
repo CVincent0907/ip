@@ -2,6 +2,7 @@ package task;
 
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import application.Parser;
 
@@ -302,21 +303,19 @@ public class Tasklist {
         return Tasklist.TASK_LIST.get(taskIndex).toString();
     }
 
+    /**
+     * Finds and returns a list of tasks that match the specified date.
+     * The date is checked against deadlines for Deadline tasks and
+     * start/end dates for Event tasks.
+     *
+     * @param dateToCheck The date in "dd-MM-yyyy" format to look up tasks.
+     * @return An ArrayList of tasks that match the specified date.
+     */
     public static ArrayList<Task> scheduleLookUp(String dateToCheck) {
-        // can put an assertion here to check the form of date is in dd-mm-yyyy
-        ArrayList<Task> lst = new ArrayList<>();
-        for (Task t: Tasklist.TASK_LIST) {
-            if (t instanceof Deadline) {
-                if (((Deadline) t).isDeadlineMatch(dateToCheck)) {
-                    lst.add(t);
-                }
-            }
-            if (t instanceof Event) {
-                if (((Event) t).isFromDateOrByDateMatch(dateToCheck)) {
-                    lst.add(t);
-                }
-            }
-        }
-        return  lst;
+        return Tasklist.TASK_LIST.stream()
+                .filter(t -> (t instanceof Deadline && ((Deadline) t).isDeadlineMatch(dateToCheck))
+                        || (t instanceof Event && ((Event) t).isFromDateOrByDateMatch(dateToCheck)))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
+
 }
