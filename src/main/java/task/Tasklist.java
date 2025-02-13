@@ -53,39 +53,50 @@ public class Tasklist {
      *              the success or failure of task creation.</p>
      *
      * @param input The user input string containing the task details.
-     * @param len The number of parts in the input, used to check if additional arguments are provided.
+     * @param inputCommandLen The number of parts in the input, used to check if additional arguments are provided.
      * @return A message string indicating the result of adding the task or an error reminder.
      */
-    private static String getAddTaskMessage(String input, int len) {
+    private static String getAddTaskMessage(String input, int inputCommandLen) {
         boolean taskCreationStatusFlag;
+
         if (input.toLowerCase().startsWith("todo")) {
-            if (len <= 1) {
-                final String TODO_EMPTY_ARGUMENT_REMINDER = "There must be something after \"todo\"!";
-                return TODO_EMPTY_ARGUMENT_REMINDER;
+            final String TODO_EMPTY_ARGUMENT_REMINDER = "There must be something after \"todo\"!";
+            String emptyArgMsg = Tasklist.checkEmptyArgCommand(inputCommandLen, TODO_EMPTY_ARGUMENT_REMINDER);
+            if (emptyArgMsg != null) {
+                return emptyArgMsg;
             }
 
             taskCreationStatusFlag = Parser.extractAndCreateTask(input, Todo.REGEX_1, 1);
         } else if (input.toLowerCase().startsWith("deadline")) {
-            if (len <= 1) {
-                final String DEADLINE_EMPTY_ARGUMENT_REMINDER = "There must be something after \"deadline\"!";
-                return DEADLINE_EMPTY_ARGUMENT_REMINDER;
+            final String DEADLINE_EMPTY_ARGUMENT_REMINDER = "There must be something after \"deadline\"!";
+            String emptyArgMsg = Tasklist.checkEmptyArgCommand(inputCommandLen, DEADLINE_EMPTY_ARGUMENT_REMINDER);
+            if (emptyArgMsg != null) {
+                return emptyArgMsg;
             }
 
             taskCreationStatusFlag = Parser.extractAndCreateTask(input, Deadline.DATE_TIME_REGEX_1, 2);
         } else if (input.toLowerCase().startsWith("event")) {
-            if (len <= 1) {
-                final String EVENT_EMPTY_ARGUMENT_REMINDER = "There must be something after \"event\"!";
-                return EVENT_EMPTY_ARGUMENT_REMINDER;
+            final String EVENT_EMPTY_ARGUMENT_REMINDER = "There must be something after \"event\"!";
+            String emptyArgMsg = Tasklist.checkEmptyArgCommand(inputCommandLen, EVENT_EMPTY_ARGUMENT_REMINDER);
+            if (emptyArgMsg != null) {
+                return emptyArgMsg;
             }
 
             taskCreationStatusFlag = Parser.extractAndCreateTask(input, Event.DATE_TIME_REGEX_1, 3);
         } else {
-            final String OUT_OF_SERVICE_REMINDER = "System does not support such command. Only todo ..., deadline ...," 
+            final String OUT_OF_SERVICE_REMINDER = "System does not support such command. Only todo ..., deadline ...,"
                     + " event..., mark..., unmark..., delete..., find..., list..., lookup... and bye!";
             return OUT_OF_SERVICE_REMINDER;
         }
 
         return Tasklist.getTaskCreationMessage(taskCreationStatusFlag);
+    }
+
+    private static String checkEmptyArgCommand(int inputCommandLen, String msg) {
+        if (inputCommandLen <= 1) {
+            return msg;
+        }
+        return null;
     }
 
     /**
