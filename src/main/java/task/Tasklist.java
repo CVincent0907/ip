@@ -130,11 +130,7 @@ public class Tasklist {
         StringBuilder output = new StringBuilder();
         boolean isValidTaskNumber = taskNumber > 0 && taskNumber <= Task.getTaskCount();
         if (isValidTaskNumber) {
-            int taskIndex = taskNumber - 1;
-            String taskInfo = Tasklist.TASK_LIST.get(taskIndex).toString();
-            Tasklist.TASK_LIST.remove(taskIndex);
-            Task.reduceTaskCount();
-
+            String taskInfo = Tasklist.getDeletedTaskInfo(taskNumber);
             output.append("Hey bro! I have removed task ").append(taskNumber).append(".\n");
             output.append(taskInfo).append("\n");
         } else {
@@ -143,6 +139,14 @@ public class Tasklist {
 
         output.append("Now you have ").append(Task.getTaskCount()).append(" tasks in the list.\n");
         return output.toString();
+    }
+
+    private static String getDeletedTaskInfo(Integer taskNumber) {
+        int taskIndex = taskNumber - 1;
+        String taskInfo = Tasklist.TASK_LIST.get(taskIndex).toString();
+        Tasklist.TASK_LIST.remove(taskIndex);
+        Task.reduceTaskCount();
+        return taskInfo;
     }
 
     /**
@@ -188,11 +192,7 @@ public class Tasklist {
         boolean isValidTaskNumber = taskNumber > 0 && taskNumber <= Task.getTaskCount();
         if (isValidTaskNumber) {
             int taskIndex = taskNumber - 1;
-            if (isTaskMarked) {
-                Tasklist.mark(taskIndex);
-            } else {
-                Tasklist.unmark(taskIndex);
-            }
+            Tasklist.markExtractedTask(isTaskMarked, taskIndex);
             output.append(msg).append(taskNumber).append(" .\n");
         } else {
             output.append("You do not have task ").append(taskNumber).append("!\n");
@@ -203,6 +203,14 @@ public class Tasklist {
         }
 
         return output.toString();
+    }
+
+    private static void markExtractedTask(boolean isTaskMarked, int taskIndex) {
+        if (isTaskMarked) {
+            Tasklist.mark(taskIndex);
+        } else {
+            Tasklist.unmark(taskIndex);
+        }
     }
 
     /**
