@@ -112,18 +112,18 @@ public class Tasklist {
      */
     private static String getTaskCreationMessage(boolean taskCreationStatusFlag) {
         // Happy path refactoring
-        StringBuilder message = new StringBuilder();
+        StringBuilder systemResponse = new StringBuilder();
         if (!taskCreationStatusFlag) {
-            message.append("    Input format is incorrect.\n")
+            systemResponse.append("    Input format is incorrect.\n")
                     .append("    todo input format :todo XX\n")
                     .append("    deadline input format :deadline XX /by dd-mm-yyyy hhmm\n")
                     .append("    event input format :event XX /from dd-mm-yyyy hhmm /to dd-mm-yyyy hhmm");
-            return message.toString();
+            return systemResponse.toString();
         }
-        message.append("Got it. I've added this task:\n");
-        message.append("   ").append(Tasklist.TASK_LIST.get(Task.getTaskCount() - 1)).append("\n");
-        message.append("Now you have ").append(Task.getTaskCount()).append(" tasks in the list.");
-        return message.toString();
+        systemResponse.append("Got it. I've added this task:\n");
+        systemResponse.append("   ").append(Tasklist.TASK_LIST.get(Task.getTaskCount() - 1)).append("\n");
+        systemResponse.append("Now you have ").append(Task.getTaskCount()).append(" tasks in the list.");
+        return systemResponse.toString();
     }
 
     /**
@@ -138,18 +138,18 @@ public class Tasklist {
      */
     public static String delete(Integer taskNumber) {
 
-        StringBuilder output = new StringBuilder();
+        StringBuilder systemResponse = new StringBuilder();
         boolean isValidTaskNumber = taskNumber > 0 && taskNumber <= Task.getTaskCount();
         if (isValidTaskNumber) {
             String taskInfo = Tasklist.getDeletedTaskInfo(taskNumber);
-            output.append("Hey bro! I have removed task ").append(taskNumber).append(".\n");
-            output.append(taskInfo).append("\n");
+            systemResponse.append("Hey bro! I have removed task ").append(taskNumber).append(".\n");
+            systemResponse.append(taskInfo).append("\n");
         } else {
-            output.append("Hey bro! You do not have task ").append(taskNumber).append(".\n");
+            systemResponse.append("Hey bro! You do not have task ").append(taskNumber).append(".\n");
         }
 
-        output.append("Now you have ").append(Task.getTaskCount()).append(" tasks in the list.\n");
-        return output.toString();
+        systemResponse.append("Now you have ").append(Task.getTaskCount()).append(" tasks in the list.\n");
+        return systemResponse.toString();
     }
 
     private static String getDeletedTaskInfo(Integer taskNumber) {
@@ -170,16 +170,16 @@ public class Tasklist {
      */
     public static String list() {
 
-        StringBuilder taskListBuilder = new StringBuilder();
-        taskListBuilder.append("Here are the tasks in your list:\n");
+        StringBuilder systemResponse = new StringBuilder();
+        systemResponse.append("Here are the tasks in your list:\n");
 
         for (int i = 0; i < Task.getTaskCount(); i++) {
-            taskListBuilder.append((i + 1)).append(". ")
+            systemResponse.append((i + 1)).append(". ")
                     .append(Tasklist.TASK_LIST.get(i))
                     .append("\n");
         }
 
-        return taskListBuilder.toString();
+        return systemResponse.toString();
     }
 
     /**
@@ -235,14 +235,14 @@ public class Tasklist {
      *         respective indices.
      */
     public static String list(ArrayList<Task> taskList) {
-        StringBuilder output = new StringBuilder();
+        StringBuilder systemResponse = new StringBuilder();
 
         int taskIndex = 1;
         for (Task t : taskList) {
-            output.append("    ").append(taskIndex).append(". ").append(t.toString()).append("\n");
+            systemResponse.append("    ").append(taskIndex).append(". ").append(t.toString()).append("\n");
             taskIndex++;
         }
-        return output.toString();
+        return systemResponse.toString();
     }
 
 
