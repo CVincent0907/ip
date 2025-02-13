@@ -198,25 +198,25 @@ public class Tasklist {
      * @return A formatted string containing the message and the updated list of tasks.
      */
     public static String list(Integer taskNumber, boolean isTaskMarked, String msg) {
-        StringBuilder output = new StringBuilder();
+        StringBuilder systemResponse = new StringBuilder();
 
         boolean isValidTaskNumber = taskNumber > 0 && taskNumber <= Task.getTaskCount();
         if (isValidTaskNumber) {
-            int taskIndex = taskNumber - 1;
-            Tasklist.markExtractedTask(isTaskMarked, taskIndex);
-            output.append(msg).append(taskNumber).append(" .\n");
+            Tasklist.markExtractedTask(isTaskMarked, taskNumber);
+            systemResponse.append(msg).append(taskNumber).append(" .\n");
         } else {
-            output.append("You do not have task ").append(taskNumber).append("!\n");
+            systemResponse.append("You do not have task ").append(taskNumber).append("!\n");
         }
 
         for (int j = 0; j < Task.getTaskCount(); j++) {
-            output.append(j + 1).append(". ").append(Tasklist.TASK_LIST.get(j)).append("\n");
+            systemResponse.append(j + 1).append(". ").append(Tasklist.TASK_LIST.get(j)).append("\n");
         }
 
-        return output.toString();
+        return systemResponse.toString();
     }
 
-    private static void markExtractedTask(boolean isTaskMarked, int taskIndex) {
+    private static void markExtractedTask(boolean isTaskMarked, int taskNumber) {
+        int taskIndex = taskNumber - 1;
         if (isTaskMarked) {
             Tasklist.mark(taskIndex);
         } else {
