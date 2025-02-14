@@ -36,7 +36,9 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-        dialogContainer.getChildren().add(new Label("Hello! I am TearIT. How can I help you?"));
+        Label label = new Label("Welcome to TearIT, enter anything to keep start...");
+        label.setStyle("-fx-font-weight: bold;");
+        dialogContainer.getChildren().add(label);
     }
 
     /** Injects the TearIT.TearIT instance */

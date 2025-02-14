@@ -23,8 +23,10 @@ public class DialogBox extends HBox {
     private Label dialog;
     @FXML
     private ImageView displayPicture;
+    @FXML
+    private Label nameLabel;
 
-    private DialogBox(String text, Image img) {
+    private DialogBox(String text, Image img, String character) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
             //  Set controller to DialogBox but in the nickname of ROOT
@@ -34,7 +36,7 @@ public class DialogBox extends HBox {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        nameLabel.setText(character);
         dialog.setText(text);
         displayPicture.setImage(img);
     }
@@ -50,11 +52,11 @@ public class DialogBox extends HBox {
     }
 
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        return new DialogBox(text, img, "You");
     }
 
     public static DialogBox getTearItDialog(String text, Image img) {
-        var db = new DialogBox(text, img);
+        var db = new DialogBox(text, img, "TearIT");
         db.flip();
         return db;
     }
