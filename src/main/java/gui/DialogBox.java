@@ -56,7 +56,7 @@ public class DialogBox extends HBox {
     }
 
     public static DialogBox getTearItDialog(String text, Image img) {
-        var db = new DialogBox(text, img, "tearit");
+        var db = new DialogBox(text, img, "TearIT");
         db.flip();
         return db;
     }
