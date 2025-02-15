@@ -57,7 +57,7 @@ public class Tasklist {
      * @return A message string indicating the result of adding the task or an error reminder.
      */
     private static String getAddTaskMessage(String input, int inputCommandLen) {
-        boolean taskCreationStatusFlag;
+        boolean isTaskCreated;
 
         if (input.toLowerCase().startsWith("todo")) {
             final String TODO_EMPTY_ARGUMENT_REMINDER = "There must be something after \"todo\"!";
@@ -66,7 +66,7 @@ public class Tasklist {
                 return emptyArgMsg;
             }
 
-            taskCreationStatusFlag = Parser.extractAndCreateTask(input, Todo.REGEX_1, 1);
+            isTaskCreated = Parser.extractAndCreateTask(input, Todo.REGEX_1, 1);
         } else if (input.toLowerCase().startsWith("deadline")) {
             final String DEADLINE_EMPTY_ARGUMENT_REMINDER = "There must be something after \"deadline\"!";
             String emptyArgMsg = Tasklist.checkEmptyArgCommand(inputCommandLen, DEADLINE_EMPTY_ARGUMENT_REMINDER);
@@ -74,7 +74,7 @@ public class Tasklist {
                 return emptyArgMsg;
             }
 
-            taskCreationStatusFlag = Parser.extractAndCreateTask(input, Deadline.DATE_TIME_REGEX_1, 2);
+            isTaskCreated = Parser.extractAndCreateTask(input, Deadline.DATE_TIME_REGEX_1, 2);
         } else if (input.toLowerCase().startsWith("event")) {
             final String EVENT_EMPTY_ARGUMENT_REMINDER = "There must be something after \"event\"!";
             String emptyArgMsg = Tasklist.checkEmptyArgCommand(inputCommandLen, EVENT_EMPTY_ARGUMENT_REMINDER);
@@ -82,14 +82,14 @@ public class Tasklist {
                 return emptyArgMsg;
             }
 
-            taskCreationStatusFlag = Parser.extractAndCreateTask(input, Event.DATE_TIME_REGEX_1, 3);
+            isTaskCreated = Parser.extractAndCreateTask(input, Event.DATE_TIME_REGEX_1, 3);
         } else {
             final String OUT_OF_SERVICE_REMINDER = "System does not support such command. Only todo ..., deadline ...,"
                     + " event..., mark..., unmark..., delete..., find..., list..., lookup... and bye!";
             return OUT_OF_SERVICE_REMINDER;
         }
 
-        return Tasklist.getTaskCreationMessage(taskCreationStatusFlag);
+        return Tasklist.getTaskCreationMessage(isTaskCreated);
     }
 
     private static String checkEmptyArgCommand(int inputCommandLen, String msg) {
@@ -105,15 +105,15 @@ public class Tasklist {
      *      and displaying the updated task list count. If the task creation fails, it returns an error message
      *              with the correct input formats for todo, deadline, and event tasks.</p>
      *
-     * @param taskCreationStatusFlag A flag indicating the success or failure of task creation.
+     * @param isTaskCreated A flag indicating the success or failure of task creation.
      *        If false, an error message with input format guidelines is returned;
      *        if true, a success message is returned.
      * @return A message indicating the result of the task creation process.
      */
-    private static String getTaskCreationMessage(boolean taskCreationStatusFlag) {
+    private static String getTaskCreationMessage(boolean isTaskCreated) {
         // Happy path refactoring
         StringBuilder systemResponse = new StringBuilder();
-        if (!taskCreationStatusFlag) {
+        if (!isTaskCreated) {
             systemResponse.append("    Input format is incorrect.\n")
                     .append("    todo input format :todo XX\n")
                     .append("    deadline input format :deadline XX /by dd-mm-yyyy hhmm\n")

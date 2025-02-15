@@ -24,21 +24,21 @@ public abstract class Task {
     }
 
     /**
-     * Increase the total number of tasks upon successful creation by one.
+     * Increases the total number of tasks upon successful creation by one.
      */
     public static void addTaskCount() {
         Task.taskCount++;
     }
 
     /**
-     * Reduce the total number of tasks upon task deletion by one.
+     * Reduces the total number of tasks upon task deletion by one.
      */
     public static void reduceTaskCount() {
         Task.taskCount--;
     }
 
     /**
-     * Set the task isDone status to <code>true</code>.
+     * Sets the task isDone status to <code>true</code>.
      */
     public void mark() {
         this.isDone = true;

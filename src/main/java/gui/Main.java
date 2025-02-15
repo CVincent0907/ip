@@ -2,7 +2,7 @@ package gui;
 
 import java.io.IOException;
 
-import TearIT.TearIT;
+import tearit.TearIT;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -32,7 +32,7 @@ public class Main extends Application {
             //  Set controller to Main Window
             //  Set entry point to backend TearIT
             fxmlLoader.<MainWindow>getController().setTearIT(tearIT);
-            stage.setTitle("TearIT");
+            stage.setTitle("tearit");
             stage.getIcons().add(icon);
             stage.show();
         } catch (IOException e) {

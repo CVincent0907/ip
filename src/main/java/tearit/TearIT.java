@@ -1,4 +1,4 @@
-package TearIT;
+package tearit;
 
 import application.Ui;
 
