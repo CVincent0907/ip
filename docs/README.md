@@ -1,6 +1,5 @@
 # TearIT User Guide
 
-
 ![Product Screenshot](Ui.png)
 
 ## Introduction
@@ -80,6 +79,19 @@ Now you have X tasks in the list.
 
 ## Task Management Features
 
+### Listing All Tasks
+To view all tasks currently in your list:
+```
+list
+```
+Expected outcome:
+```
+Here are the tasks in your list:
+1. [T][ ] Buy groceries
+2. [D][ ] Submit report (by: Sep 12 2024 11:59 PM)
+3. [E][ ] Sport (from: Aug 12 2024 06:00 PM to: Aug 13 2024 06:00 PM)
+```
+
 ### Marking a Task as Done
 Use the `mark` command followed by the task number:
 ```
@@ -136,7 +148,7 @@ Here are the matching tasks:
 1. [D][ ] Submit report (by: Sep 12 2024 11:59 PM)
 ```
 
-### Surprise Easter Egg
+## Surprise Easter Egg
 If you type:
 ```
 chidori
@@ -146,7 +158,8 @@ Something unexpected happens! Give it a try!
 # Notes
 **The commands are case-insensitive and dates must follow given format for task creation (ie: dd-mm-yyyy hhmm)**
 
-
 ---
 This guide provides an overview of TearIT's features and how to use them effectively. Happy task managing! 🚀
+
+
 
