@@ -24,7 +24,7 @@ bye
 ```
 Expected outcome:
 ```
-Bye! Hope to see you again soon.
+Bye! Hope to see you again soon!
 ```
 
 ## Adding Tasks
@@ -156,7 +156,7 @@ chidori
 Something unexpected happens! Give it a try!
 
 # Notes
-**The commands are case-insensitive and dates must follow given format for task creation (ie: dd-mm-yyyy hhmm)**
+**The commands are case-insensitive and dates must follow given format for task creation (ie: DD-MM-YYYY HHMM)**
 
 ---
 This guide provides an overview of TearIT's features and how to use them effectively. Happy task managing! 🚀
