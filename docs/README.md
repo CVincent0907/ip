@@ -1,7 +1,7 @@
 # TearIT User Guide
 
 
-// Product screenshot goes here
+![Product Screenshot](Ui.png)
 
 ## Introduction
 
