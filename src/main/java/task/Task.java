@@ -38,7 +38,7 @@ public abstract class Task {
     }
 
     /**
-     * Sets the task isDone status to <code>true</code>.
+     * Sets ans surpr the task isDone status to <code>true</code>.
      */
     public void mark() {
         this.isDone = true;

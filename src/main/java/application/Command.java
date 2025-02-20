@@ -244,6 +244,15 @@ public class Command {
      * @param systemResponse
      */
     public static void handleChidoriCommand(StringBuilder systemResponse) {
-        systemResponse.append("rasengan");
+        systemResponse.append("rasengan!!!!");
+    }
+
+
+    /**
+     * Responds user with greetings upon input hello
+     * @param systemResponse
+     */
+    public static void handleHelloCommand(StringBuilder systemResponse) {
+        systemResponse.append("Hi ! I am TearIT ! How can I help you ?");
     }
 }

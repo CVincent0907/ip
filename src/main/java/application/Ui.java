@@ -89,10 +89,6 @@ public class Ui {
             Command.handleUnmarkCommand(userInputLen, systemResponse, userInputFragments);
             break;
 
-        case "bye":
-            String systemByeMsg = args[0];
-            return Command.handleByeCommand(userInputLen, systemResponse, systemByeMsg);
-
         case "delete":
             Command.handleDeleteCommand(userInputLen, systemResponse, userInputFragments);
             break;
@@ -104,6 +100,14 @@ public class Ui {
         case "lookup":
             Command.handleLookUpCommand(userInputLen, systemResponse, userInputFragments);
             break;
+
+        case "hello":
+            Command.handleHelloCommand(systemResponse);
+            break;
+
+        case "bye":
+            String systemByeMsg = args[0];
+            return Command.handleByeCommand(userInputLen, systemResponse, systemByeMsg);
 
         case "chidori":
             Command.handleChidoriCommand(systemResponse);
