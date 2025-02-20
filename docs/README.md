@@ -16,7 +16,7 @@ hello
 ```
 Expected outcome:
 ```
-Hello! How can I assist you today?
+Hi ! I am TearIT ! How can I help you ?
 ```
 
 ### Exiting the Application
