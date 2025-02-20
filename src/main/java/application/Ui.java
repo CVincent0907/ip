@@ -105,6 +105,10 @@ public class Ui {
             Command.handleLookUpCommand(userInputLen, systemResponse, userInputFragments);
             break;
 
+        case "chidori":
+            Command.handleChidoriCommand(systemResponse);
+            break;
+
         default:
             systemResponse.append(Tasklist.add(userInput)).append("\n");
             break;

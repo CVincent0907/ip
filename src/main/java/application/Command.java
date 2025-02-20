@@ -238,4 +238,8 @@ public class Command {
         }
         systemResponse.append(Tasklist.list()).append("\n");
     }
+
+    public static void handleChidoriCommand(StringBuilder systemResponse) {
+        systemResponse.append("rasengan");
+    }
 }
