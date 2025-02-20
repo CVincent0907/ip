@@ -239,6 +239,10 @@ public class Command {
         systemResponse.append(Tasklist.list()).append("\n");
     }
 
+    /**
+     * Responds user with rasengan upon chidori input
+     * @param systemResponse
+     */
     public static void handleChidoriCommand(StringBuilder systemResponse) {
         systemResponse.append("rasengan");
     }

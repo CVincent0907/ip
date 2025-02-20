@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
+import task.Task;
 import task.Tasklist;
+import task.Todo;
 
 /**
  * TasklistTest is a JUnit test class that verifies the functionality of the Tasklist class.
@@ -129,7 +131,7 @@ public class TasklistTest {
      * Expects a NumberFormatException.
      */
     @Test
-    public void delete_invalidInputTypeString_fail_2() {
+    public void delete_invalidInputTypeString_fail_1() {
         try {
             String input = "hahaha";
             Tasklist.delete(Integer.parseInt(input));
@@ -138,4 +140,5 @@ public class TasklistTest {
             assertEquals("For input string: \"hahaha\"", e.getMessage());
         }
     }
+
 }
