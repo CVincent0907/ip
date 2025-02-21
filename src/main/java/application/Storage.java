@@ -46,37 +46,35 @@ public class Storage {
     }
 
     /**
-     * Create a file named TearIT.txt under a created directory named data when TearIT.txt
-     *      does not exist under current working directory.
+     * Create a 'data' directory and a file named TearIT.txt inside it if they don't exist.
      *
-     * @throws IOException Throws IOException if file or directory could not be created when
-     *                     TearIT.txt does not exist.
+     * @throws IOException Throws IOException if file or directory could not be created.
      */
     public static void createFileIfNotExists() throws IOException {
-        File file = new File(Storage.getPath());
-
-        // Get the directory from the file path
-        File parentDirectory = file.getParentFile();
-
-        // Ensure the directory exists (create it if it doesn't)
-        if (parentDirectory != null && !parentDirectory.exists()) {
-            boolean directoryCreated = parentDirectory.mkdirs(); // Creates the directory, if needed
+        // Create 'data' directory if it doesn't exist
+        File dataDirectory = new File("data");
+        if (!dataDirectory.exists()) {
+            boolean directoryCreated = dataDirectory.mkdirs();
             if (!directoryCreated) {
-                throw new IOException("Failed to create the directory at " + parentDirectory.getPath());
+                throw new IOException("Failed to create the directory 'data'");
             }
         }
 
-        // Check if the file exists and create it if not
+        // Create the file inside the 'data' directory
+        File file = new File(dataDirectory, "TearIT.txt");
         if (!file.exists()) {
             boolean fileCreated = file.createNewFile();
             if (!fileCreated) {
-                throw new IOException("Failed to create the file at " + Storage.getPath());
+                throw new IOException("Failed to create the file 'TearIT.txt' inside 'data' directory");
             }
         }
     }
 
+    /**
+     * Get the path to the text file in the 'data' directory.
+     */
     private static String getPath() {
-        return "data/TearIT.txt";
+        return "data" + File.separator + "TearIT.txt";
     }
 
 }

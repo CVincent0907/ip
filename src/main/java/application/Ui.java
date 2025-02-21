@@ -101,7 +101,12 @@ public class Ui {
             Command.handleLookUpCommand(userInputLen, systemResponse, userInputFragments);
             break;
 
+        case "help":
+            Command.handleHelpCommand(userInputLen,systemResponse);
+            break;
+
         case "hello":
+        case "hi":
             Command.handleHelloCommand(systemResponse);
             break;
 

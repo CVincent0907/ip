@@ -255,4 +255,33 @@ public class Command {
     public static void handleHelloCommand(StringBuilder systemResponse) {
         systemResponse.append("Hi ! I am TearIT ! How can I help you ?");
     }
+
+    /**
+     * Responds with User Manual
+     * @param userInputLen
+     * @param systemResponse
+     */
+    public static void handleHelpCommand(int userInputLen, StringBuilder systemResponse) {
+        if (userInputLen > 1) {
+            systemResponse.append("There must be NO argument after 'help'!\n");
+            return;
+        }
+
+        systemResponse.append("Welcome to TearIT!\n")
+                .append("Here are the missions we accept:\n")
+                .append("- todo <task description>: Add a ToDo task\n")
+                .append("- deadline <task description> /by <date>: Add a Deadline task\n")
+                .append("- event <task description> /from <start date time> /to <end date time>: Add an Event task\n")
+                .append("- list: View all tasks\n")
+                .append("- mark <task number>: Mark a task as done\n")
+                .append("- unmark <task number>: Unmark a task\n")
+                .append("- delete <task number>: Delete a task\n")
+                .append("- find <keyword>: Find tasks that match the keyword\n")
+                .append("- lookup <date>: Check specific schedule\n")
+                .append("- help: Show user manual\n")
+                .append("- hi/hello: Greet the program\n")
+                .append("- bye: Exit the program\n");
+    }
+
 }
+
