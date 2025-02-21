@@ -11,7 +11,7 @@ TearIT is a task management tool that helps users efficiently track and manage t
 ### Greeting
 To receive a friendly greeting, type:
 ```
-hello
+hello/hi
 ```
 Expected outcome:
 ```
@@ -25,7 +25,15 @@ bye
 Expected outcome:
 ```
 Bye! Hope to see you again soon!
+
 ```
+
+### User manual 
+```
+help
+```
+It will show you a list of available commands.
+
 
 ## Adding Tasks
 
